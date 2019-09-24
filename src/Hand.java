@@ -5,27 +5,37 @@
 import java.util.*;
 
 public class Hand {
-    private List<Card> cards;
+    private List<Card> hand;
 
     public Hand() {
-        cards = new ArrayList<Card>();
+        hand = new ArrayList<Card>();
     }
 
-    public Hand(Card card) {
-        this();
-        cards.add(card);
+    public List<Card> getHand() {
+        return hand;
+    }
+
+    public void clearHand() {
+        hand.clear();
     }
 
     public void addCard(Card card) {
-        cards.add(card);
+        hand.add(card);
+    }
+
+    public int getCardCount() {
+        return hand.size();
+    }
+
+    public Card getCardAt(int idx) {
+        return hand.get(idx);
     }
 
     @Override
     public String toString() {
         String result = "";
-        for (Card card : cards) {
-            result += card;
-            result += " ";
+        for (Card card : hand) {
+            result = result + card + "\n";
         }
         return result;
     }
