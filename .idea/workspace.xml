@@ -2,8 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4d630d12-0e05-45d6-bc54-e150e9c78367" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/AceCard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/AceCard.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/BlackjackCard.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/BlackjackDealer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BlackjackDealer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/BlackjackPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BlackjackPlayer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Card.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Card.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Deck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Deck.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/FaceCard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/FaceCard.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Hand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Hand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Player.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
