@@ -1,3 +1,5 @@
+import java.util.HashSet;
+
 public class BlackjackHand extends Hand {
 
     public int getTotalValue() {
@@ -49,5 +51,18 @@ public class BlackjackHand extends Hand {
             }
         }
         return hasAce && hasFaceCard;
+    }
+
+    public boolean isSplittable() {
+        // only first two cards with same game value can be split
+        if (getCardCount() != 2) {
+            return false;
+        }
+        int cardValue1 = getCardAt(0).getHardValue();
+        int cardValue2 = getCardAt(1).getHardValue();
+        if (cardValue1 == cardValue2) {
+            return true;
+        }
+        return false;
     }
 }
