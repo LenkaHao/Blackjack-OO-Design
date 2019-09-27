@@ -5,6 +5,7 @@
 import java.util.*;
 
 public class Hand {
+
     private List<BlackjackCard> cards;
 
     public Hand(BlackjackCard card1, BlackjackCard card2) {
@@ -39,6 +40,9 @@ public class Hand {
         return maxScore;
     }
 
+    /**
+     * 这个好像有点问题，刚测了一下，两张A的时候回的是12， 应该是要回20吧，等会要记得改一下
+     */
     private List<Integer> getScores() {
         // there can be more than one Ace, so there can be multiple different scores
         List<Integer> scores = new ArrayList<Integer>();
