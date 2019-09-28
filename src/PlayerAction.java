@@ -1,13 +1,19 @@
+/**
+ * Created by Jiatong Hao, Xiankang Wu and Lijun Chen on 9/27/2019.
+ */
+
+import java.util.List;
+
 public interface PlayerAction {
     /**
      * player make bet
      */
-    void bet(int currency);
+    void bet();
 
     /**
      * player could split into two hands, if the initial two cards are the same rank
      */
-    void split();
+    boolean split(List<BlackjackHand> hand, int pos);
 
     /**
      * player could double up their bet (they could only take one more card after)
@@ -17,7 +23,7 @@ public interface PlayerAction {
     /**
      * the player takes one additional card
      */
-    void hit();
+    void hit(Deck deck, List<BlackjackHand> hand, int pos);
 
     /**
      * the player ends and maintains the value of current hand
