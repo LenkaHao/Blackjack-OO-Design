@@ -19,16 +19,6 @@ public class Card {
         return value;
     }
 
-    // returns the soft value: 10 for face card, 1 for Ace
-    public int getSoftValue() {
-        return getValue();
-    }
-
-    // returns the hard value: 10 for face card, 11 for Ace
-    public int getHardValue() {
-        return getValue();
-    }
-
     // returns a string with suit and value to print
     @Override
     public String toString() {
