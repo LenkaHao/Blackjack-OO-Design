@@ -8,9 +8,9 @@ import java.util.Map;
 
 public class GameVisualizer {
 
-    HashMap<Integer, Integer> playerState;
+    private HashMap<Integer, Integer> playerState;
 
-    int gameState;
+    private int gameState;
 
     /**
      * constructor
