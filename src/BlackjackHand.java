@@ -3,6 +3,7 @@
  */
 
 public class BlackjackHand extends Hand<BlackjackCard> {
+
     private int bet;
 
     public BlackjackHand() {
@@ -44,44 +45,5 @@ public class BlackjackHand extends Hand<BlackjackCard> {
         }
 
         return value;
-    }
-
-    public boolean isBusted() {
-        return getTotalValue() > 21;
-    }
-
-    public boolean isBlackjack() {
-        return getTotalValue() == 21;
-    }
-
-    public boolean isNaturalBlackjack() {
-        if (!isBlackjack()) {
-            return false;
-        }
-        boolean hasAce = false;
-        boolean hasFaceCard = false;
-        for (int i = 0; i < getCardCount(); i++) {
-            Card card = getCardAt(i);
-            if (card.getValue() > 10) {
-                hasFaceCard = true;
-            }
-            if (card.getValue() == 1) {
-                hasAce = true;
-            }
-        }
-        return hasAce && hasFaceCard;
-    }
-
-    public boolean isSplittable() {
-        // only first two cards with same game value can be split
-        if (getCardCount() != 2) {
-            return false;
-        }
-        int cardValue1 = ((BlackjackCard)getCardAt(0)).getHardValue();
-        int cardValue2 = ((BlackjackCard)getCardAt(1)).getHardValue();
-        if (cardValue1 == cardValue2) {
-            return true;
-        }
-        return false;
     }
 }
