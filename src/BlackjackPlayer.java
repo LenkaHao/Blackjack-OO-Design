@@ -49,7 +49,7 @@ public class BlackjackPlayer extends Player implements PlayerAction{
             Card card = hand.getCardAt(0);
             BlackjackHand newHand = new BlackjackHand(card);
             hand.removeCard(card);
-            addHands(newHand);
+            addHand(newHand);
             return true;
         }
         return false;
@@ -103,6 +103,6 @@ public class BlackjackPlayer extends Player implements PlayerAction{
     }
 
     public BlackjackHand getHandAt(int idx) {
-        return getHands().get(idx);
+        return (BlackjackHand) getHands().get(idx);
     }
 }

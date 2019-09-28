@@ -5,7 +5,7 @@
 public class BlackjackDealer extends Player {
 
     public BlackjackHand getHand() {
-        return getHands().get(0);
+        return (BlackjackHand) getHands().get(0);
     }
 
 }
