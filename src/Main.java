@@ -16,8 +16,8 @@ public class Main {
 
 
         // test split
-        player1.split(player1.getHands(), 0);
-        System.out.println(player1.getHandAt(0).getCardAt(0).getSuit() + " " + player1.getHandAt(0).getCardAt(0).getValue());
-        System.out.println(player1.getHandAt(1).getCardAt(0).getSuit() + " " + player1.getHandAt(1).getCardAt(0).getValue());
+//        player1.split(player1.getHands(), 0);
+//        System.out.println(player1.getHandAt(0).getCardAt(0).getSuit() + " " + player1.getHandAt(0).getCardAt(0).getValue());
+//        System.out.println(player1.getHandAt(1).getCardAt(0).getSuit() + " " + player1.getHandAt(1).getCardAt(0).getValue());
     }
 }
