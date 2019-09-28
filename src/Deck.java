@@ -4,13 +4,24 @@
 
 import java.util.*;
 
-public abstract class Deck {
+public abstract class Deck<E extends Card> {
+
+    private List<E> cards;
+
     private int cardCount;
 
     public Deck() {
         cardCount = 52;
         createDeck();
         shuffle();
+    }
+
+    public List<E> getCards() {
+        return cards;
+    }
+
+    public void setCards(List<E> cards) {
+        this.cards = cards;
     }
 
     public int getCardCount() {
@@ -23,7 +34,17 @@ public abstract class Deck {
 
     abstract void createDeck();
 
-    abstract void shuffle();
+    public void shuffle() {
+        Collections.shuffle(cards);
+    }
 
-    abstract <T extends Card> T dealCard();
+    public E dealCard() {
+        if (getCardCount() == 0) {
+            createDeck();
+            shuffle();
+            setCardCount(52);
+        }
+        setCardCount(-1);
+        return cards.remove(0);
+    }
 }

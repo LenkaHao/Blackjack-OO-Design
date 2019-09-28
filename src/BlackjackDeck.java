@@ -1,10 +1,9 @@
 import java.util.*;
 
 public class BlackjackDeck extends Deck {
-    private List<BlackjackCard> cards;
 
     public void createDeck() {
-        cards = new ArrayList<BlackjackCard>();
+        List<BlackjackCard> cards = new ArrayList<BlackjackCard>();
         String[] suits = new String[]{"Spade", "Heart", "Club", "Diamond"};
         for (String suit : suits) {
             cards.add(new BlackjackAceCard(suit));
@@ -15,19 +14,6 @@ public class BlackjackDeck extends Deck {
                 cards.add(new BlackjackFaceCard(suit, i));
             }
         }
-    }
-
-    public void shuffle() {
-        Collections.shuffle(cards);
-    }
-
-    public BlackjackCard dealCard() {
-        if (getCardCount() == 0) {
-            createDeck();
-            shuffle();
-            setCardCount(52);
-        }
-        setCardCount(-1);
-        return cards.remove(0);
+        setCards(cards);
     }
 }

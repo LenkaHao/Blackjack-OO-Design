@@ -4,24 +4,30 @@
 
 import java.util.*;
 
-public class Player {
-    private List<Hand> hands;
+public class Player<E extends Hand> {
 
-    public Player() {
-        hands = new ArrayList<Hand>();
-        Hand hand = new Hand();
-        hands.add(hand);
+    private int id;
+
+    private List<E> hands;
+
+    public Player(){
+        hands = new ArrayList<E>();
     }
 
-    public List<Hand> getHands() {
+    public Player(int id) {
+        this.id = id;
+        hands = new ArrayList<E>();
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public List<E> getHands() {
         return hands;
     }
 
-    public void addHand(Hand hand) {
+    public void addHand(E hand) {
         hands.add(hand);
-    }
-
-    public void setHands(Hand hand, int position) {
-        hands.get(position).setHand(hand);
     }
 }

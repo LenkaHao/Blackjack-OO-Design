@@ -1,18 +1,19 @@
 public class BlackjackJudge extends Judge{
 
-    public BlackjackJudge() {
-        super();
+    private int dealerThreshold;
+
+    public BlackjackJudge(int threshold) {
+        dealerThreshold = threshold;
     }
 
-    public boolean isActionValid(String str, BlackjackHand hand) {
-        return !str.equals("split") || isSplittable(hand);
+    public boolean isActionValid(BlackjackPlayer player, BlackjackHand hand, String str) {
+        return !str.equals("split") || isSplittable(player, hand);
     }
 
-    public boolean isSplittable(BlackjackHand hand) {
-        // only first two cards with same game value can be split
-        if (hand.getCardCount() != 2) {
-            return false;
-        }
+    private boolean isSplittable(BlackjackPlayer player, BlackjackHand hand) {
+        // check if there is only two cards in this hand &  check if balance can afford two bets
+        if (hand.getCardCount() != 2) return false;
+        if (player.getBalance() < hand.getBet() * 2) return false;
         int cardValue1 = hand.getCardAt(0).getHardValue();
         int cardValue2 = hand.getCardAt(1).getHardValue();
         return cardValue1 == cardValue2;
@@ -22,7 +23,7 @@ public class BlackjackJudge extends Judge{
         return hand.getTotalValue() > 21;
     }
 
-    private boolean isBlackjack(BlackjackHand hand) {
+    public boolean isBlackjack(BlackjackHand hand) {
         return hand.getTotalValue() == 21;
     }
 
@@ -42,5 +43,20 @@ public class BlackjackJudge extends Judge{
             }
         }
         return hasAce && hasFaceCard;
+    }
+
+//    public void whoWins(List<BlackjackPlayer> players, BlackjackDealer dealer) {
+//        int maxHand = 0;
+//        for (BlackjackPlayer player : players) {
+//            for (BlackjackHand hand : player.)
+//        }
+//    }
+
+    public int getDealerThreshold() {
+        return dealerThreshold;
+    }
+
+    public void setDealerThreshold(int dealerThreshold) {
+        this.dealerThreshold = dealerThreshold;
     }
 }
