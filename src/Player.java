@@ -2,7 +2,8 @@
  * Created by Jiatong Hao, Xiankang Wu and Lijun Chen on 9/23/2019.
  */
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Player<E extends Hand> {
 

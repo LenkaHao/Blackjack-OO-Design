@@ -4,7 +4,7 @@
 
 import java.util.Scanner;
 
-public class BlackjackPlayer extends Player implements PlayerAction {
+public class BlackjackPlayer extends Player implements PlayerAction<BlackjackDeck, BlackjackHand> {
 
     private int balance;
 
@@ -72,10 +72,10 @@ public class BlackjackPlayer extends Player implements PlayerAction {
      * @param deck
      * @param hand
      */
-    public void doubleUp(BlackjackDeck deck, BlackjackHand hand) {
+    public void doubleUp(BlackjackDeck deck, BlackjackHand hand, BlackjackJudge judge) {
         hand.setBet(hand.getBet() * 2);
         hit(deck, hand);
-        stand();
+        if (!judge.isBusted(hand)) stand();
     }
 
     // getter & setter
