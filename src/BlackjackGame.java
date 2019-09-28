@@ -1,8 +1,9 @@
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Game {
-    private ArrayList<BlackjackPlayer> playerList;
+public class BlackjackGame implements BlackjackAction{
+    private List<BlackjackPlayer> playerList;
     private BlackjackDealer dealer;
     private BlackjackDeck deck;
     private BlackjackJudge judge;
@@ -13,7 +14,7 @@ public class Game {
     private static String[] actions = {"hit", "stand", "doubleUp", "split"};
 
     // constructor
-    Game() {
+    BlackjackGame() {
         setGameParams();
         initGame();
     }
@@ -22,7 +23,6 @@ public class Game {
         /**
          * Initialize black
          */
-        /
         System.out.println("Welcome to our game!");
         System.out.println("Created by Jiatong Hao, Xiankang Wu and Lijun Chen on 9/23/2019.");
         System.out.println("Do you want to change default values? \n e.g. 21 is the default blackjack target value, " +
@@ -78,7 +78,7 @@ public class Game {
         } while (playerCount == 0);
 
         dealer = new BlackjackDealer();
-        judge = new BlackjackJudge(dealer_val, win_val);
+        judge = new BlackjackJudge(dealerVal, winVal);
         deck = new BlackjackDeck();
         visualizer = new GameVisualizer(playerList);
         deck.shuffle();
@@ -110,17 +110,19 @@ public class Game {
     private boolean playAction(BlackjackPlayer player, String action, BlackjackHand hand) {
         switch (action) {
             case "hit":
-                player.hit(deck, hand);
+                hit(deck, hand);
                 break;
             case "stand":
-                player.stand();
+                stand();
                 break;
             case "doubleUp":
-                player.doubleUp(deck, hand);
+                // isEnoughBalance(player, hand.getBet())
+                doubleUp(deck, player, hand);
                 judge.isBusted(hand);
                 break;
             case "split":
-                player.split(hand);
+                // if (judge.isSplittable)
+                split(player, hand);
                 break;
         }
         return true;
@@ -137,14 +139,14 @@ public class Game {
     public void start() {
         // Players make their bets
         for (BlackjackPlayer player : playerList) {
-            player.bet();
+            player.makeBet();
         }
         boolean isGameEnd = false;
         while (!isGameEnd) {
             System.out.println("Current Round: " + round);
             // Player
             for (BlackjackPlayer player : playerList) {
-                ArrayList<BlackjackHand> hands = player.getHands();
+                List<BlackjackHand> hands = player.getHands();
                 for (BlackjackHand hand : hands) {
                     boolean isValid;
                     String next_action;
@@ -161,7 +163,7 @@ public class Game {
             }
             // Dealer
             while (!judge.canDealerHit(dealer)) {
-                dealer.hit();
+                hit(deck, dealer.getHand());
             }
             isGameEnd = isNextRound();
             round++;
@@ -170,9 +172,50 @@ public class Game {
         // Display statistics for all players.
     }
 
+    /**
+     * The player takes one additional card
+     * @param deck - deck
+     * @param hand - what we have right now
+     */
+    @Override
+    public void hit(BlackjackDeck deck, BlackjackHand hand) {
+        BlackjackCard newCard = (BlackjackCard) deck.dealCard();
+        hand.addCard(newCard);
+    }
+
+    /**
+     * The player could split into two hands, if the initial two cards are the same rank
+     * @param hand - the hand that wants to split
+     * @return true if successfully split hands, false otherwise
+     */
+    @Override
+    public void split(BlackjackPlayer player, BlackjackHand hand) {
+        BlackjackCard card = hand.getCardAt(0);
+        BlackjackHand newHand = new BlackjackHand(card);
+        hand.removeCard(card);
+        player.addHand(newHand);
+        player.setBalance(-hand.getBet());
+    }
+
+    /**
+     * The player double up their bets and immediately followed by a hit and stand
+     * @param deck
+     * @param hand
+     */
+    @Override
+    public void doubleUp(BlackjackDeck deck, BlackjackPlayer player, BlackjackHand hand) {
+        player.setBalance(-hand.getBet());
+        hand.setBet(hand.getBet() * 2);
+        hit(deck, hand);
+    }
+
+    @Override
+    public void stand() {
+        return;
+    }
 
     public static void main(String args[]) {
-        Game game = new Game();
+        BlackjackGame game = new BlackjackGame();
         game.start();
     }
 }
