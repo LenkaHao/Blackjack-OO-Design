@@ -5,18 +5,7 @@ public class BlackjackJudge extends Judge{
     }
 
     public boolean isActionValid(String str, BlackjackHand hand) {
-        if (str.equals("hit")) {
-            return isBusted(hand);
-        } else if (str.equals("split")) {
-            return isSplittable(hand);
-        } else if(str.equals("doubleUp")) {
-            return isBusted(hand);
-        } else if (str.equals("stand")) {
-            return true;
-        } else {
-            System.out.println("Not valid action");
-            return false;
-        }
+        return !str.equals("split") || isSplittable(hand);
     }
 
     public boolean isSplittable(BlackjackHand hand) {
@@ -26,10 +15,7 @@ public class BlackjackJudge extends Judge{
         }
         int cardValue1 = hand.getCardAt(0).getHardValue();
         int cardValue2 = hand.getCardAt(1).getHardValue();
-        if (cardValue1 == cardValue2) {
-            return true;
-        }
-        return false;
+        return cardValue1 == cardValue2;
     }
 
     private boolean isBusted(BlackjackHand hand) {
