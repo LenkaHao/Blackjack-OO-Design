@@ -46,7 +46,7 @@ public class BlackjackPlayer extends Player implements PlayerAction{
     @Override
     public boolean split(BlackjackHand hand) {
         if (hand.isSplittable()) {
-            Card card = hand.getCardAt(0);
+            BlackjackCard card = (BlackjackCard) hand.getCardAt(0);
             BlackjackHand newHand = new BlackjackHand(card);
             hand.removeCard(card);
             addHand(newHand);
@@ -72,7 +72,7 @@ public class BlackjackPlayer extends Player implements PlayerAction{
      */
     @Override
     public void hit(Deck deck, List<BlackjackHand> hand, int pos) {
-        Card newCard = deck.dealCard();
+        BlackjackCard newCard = deck.dealCard();
 //        Card newCard = new Card("Club", 5);
         hand.get(pos).addCard(newCard);
     }

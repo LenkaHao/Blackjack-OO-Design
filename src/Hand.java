@@ -4,23 +4,23 @@
 
 import java.util.*;
 
-public class Hand {
-    private List<Card> hand;
+public class Hand<T extends Card> {
+    private List<T> hand;
 
     public Hand() {
-        hand = new ArrayList<Card>();
+        hand = new ArrayList<T>();
     }
 
-    public Hand(Card card) {
-        hand = new ArrayList<Card>();
+    public Hand(T card) {
+        hand = new ArrayList<T>();
         hand.add(card);
     }
 
-    public List<Card> getHand() {
+    public List<T> getHand() {
         return hand;
     }
 
-    public void setHand(Hand hand) {
+    public void setHand(Hand<T> hand) {
         this.hand = new ArrayList<>();
         this.hand.add(hand.getCardAt(0));
     }
@@ -29,11 +29,11 @@ public class Hand {
         hand.clear();
     }
 
-    public void addCard(Card card) {
+    public void addCard(T card) {
         hand.add(card);
     }
 
-    public void removeCard(Card card) {
+    public void removeCard(T card) {
         hand.remove(card);
     }
 
@@ -41,14 +41,14 @@ public class Hand {
         return hand.size();
     }
 
-    public Card getCardAt(int idx) {
+    public T getCardAt(int idx) {
         return hand.get(idx);
     }
 
     @Override
     public String toString() {
         String result = "";
-        for (Card card : hand) {
+        for (T card : hand) {
             result = result + card + "\n";
         }
         return result;

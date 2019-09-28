@@ -2,14 +2,23 @@
  * Created by Jiatong Hao, Xiankang Wu and Lijun Chen on 9/27/2019.
  */
 
-public class BlackjackHand extends Hand {
+public class BlackjackHand extends Hand<BlackjackCard> {
+    private int bet;
 
     public BlackjackHand() {
         super();
     }
 
-    public BlackjackHand(Card card) {
+    public BlackjackHand(BlackjackCard card) {
         super(card);
+    }
+
+    public int getBet() {
+        return bet;
+    }
+
+    public void setBet(int newBet) {
+        bet = newBet;
     }
 
     public int getTotalValue() {
@@ -19,7 +28,7 @@ public class BlackjackHand extends Hand {
 
         for (int i = 0; i < cardCount; i++) {
             // Add the value of each card in the hand
-            Card card = getCardAt(i);
+            BlackjackCard card = (BlackjackCard) getCardAt(i);
             int cardSoftValue = card.getSoftValue();
             value += cardSoftValue;
 
@@ -68,8 +77,8 @@ public class BlackjackHand extends Hand {
         if (getCardCount() != 2) {
             return false;
         }
-        int cardValue1 = getCardAt(0).getHardValue();
-        int cardValue2 = getCardAt(1).getHardValue();
+        int cardValue1 = ((BlackjackCard)getCardAt(0)).getHardValue();
+        int cardValue2 = ((BlackjackCard)getCardAt(1)).getHardValue();
         if (cardValue1 == cardValue2) {
             return true;
         }
