@@ -41,14 +41,14 @@ public class BlackjackPlayer extends Player implements PlayerAction{
     /**
      * The player could split into two hands, if the initial two cards are the same rank
      * @param hand - the hand that wants to split
-     * @param pos - which hand takes action
      * @return true if successfully split hands, false otherwise
      */
     @Override
-    public boolean split(List<BlackjackHand> hand, int pos) {
-        if (hand.get(pos).isSplittable()) {
-            BlackjackHand newHand = new BlackjackHand(hand.get(pos).getCardAt(0));
-            setHands(newHand, pos);
+    public boolean split(BlackjackHand hand) {
+        if (hand.isSplittable()) {
+            Card card = hand.getCardAt(0);
+            BlackjackHand newHand = new BlackjackHand(card);
+            hand.removeCard(card);
             addHands(newHand);
             return true;
         }

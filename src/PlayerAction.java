@@ -13,7 +13,7 @@ public interface PlayerAction {
     /**
      * player could split into two hands, if the initial two cards are the same rank
      */
-    boolean split(List<BlackjackHand> hand, int pos);
+    boolean split(BlackjackHand hand);
 
     /**
      * player could double up their bet (they could only take one more card after)
