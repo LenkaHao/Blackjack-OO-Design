@@ -1,13 +1,38 @@
 public class BlackjackJudge extends Judge{
 
-    private int dealerThreshold;
+    private int dealerValue;
 
-    public BlackjackJudge(int threshold) {
-        dealerThreshold = threshold;
+    private int winValue;
+
+    // constructor
+
+    public BlackjackJudge(int dealerValue, int winValue) {
+        this.dealerValue = dealerValue;
+        this.winValue = winValue;
     }
 
-    public boolean isActionValid(BlackjackPlayer player, BlackjackHand hand, String str) {
-        return !str.equals("split") || isSplittable(player, hand);
+    // getter & setter
+
+    public int getDealerValue() {
+        return dealerValue;
+    }
+
+    public void setDealerValue(int dealerValue) {
+        this.dealerValue = dealerValue;
+    }
+
+    public int getWinValue() {
+        return winValue;
+    }
+
+    public void setWinValue(int winValue) {
+        this.winValue = winValue;
+    }
+
+    // judge methods
+
+    public boolean isActionValid(BlackjackPlayer player, BlackjackHand hand, String action) {
+        return !action.equals("split") || isSplittable(player, hand);
     }
 
     private boolean isSplittable(BlackjackPlayer player, BlackjackHand hand) {
@@ -21,6 +46,11 @@ public class BlackjackJudge extends Judge{
 
     public boolean isBusted(BlackjackHand hand) {
         return hand.getTotalValue() > 21;
+    }
+
+    public boolean canDealerHit(BlackjackDealer dealer, BlackjackHand hand) {
+        if (hand.getTotalValue() < dealerValue) {
+        }
     }
 
     public boolean isBlackjack(BlackjackHand hand) {
@@ -51,12 +81,4 @@ public class BlackjackJudge extends Judge{
 //            for (BlackjackHand hand : player.)
 //        }
 //    }
-
-    public int getDealerThreshold() {
-        return dealerThreshold;
-    }
-
-    public void setDealerThreshold(int dealerThreshold) {
-        this.dealerThreshold = dealerThreshold;
-    }
 }
