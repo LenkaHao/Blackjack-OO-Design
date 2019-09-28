@@ -1,3 +1,5 @@
+import java.util.List;
+
 public class BlackjackJudge extends Judge{
 
     private int dealerValue;
@@ -45,12 +47,15 @@ public class BlackjackJudge extends Judge{
     }
 
     public boolean isBusted(BlackjackHand hand) {
-        return hand.getTotalValue() > 21;
+        if (hand.getTotalValue() > 21) {
+            System.out.println("Your current hand value is : " + hand.getTotalValue() + "\nYour hand is busted!");
+            return true;
+        }
+        return false;
     }
 
-    public boolean canDealerHit(BlackjackDealer dealer, BlackjackHand hand) {
-        if (hand.getTotalValue() < dealerValue) {
-        }
+    public boolean canDealerHit(BlackjackDealer dealer) {
+        return dealer.getHand().getTotalValue() < dealerValue;
     }
 
     public boolean isBlackjack(BlackjackHand hand) {
@@ -75,10 +80,13 @@ public class BlackjackJudge extends Judge{
         return hasAce && hasFaceCard;
     }
 
-//    public void whoWins(List<BlackjackPlayer> players, BlackjackDealer dealer) {
-//        int maxHand = 0;
-//        for (BlackjackPlayer player : players) {
-//            for (BlackjackHand hand : player.)
-//        }
-//    }
+    public void whoWins(List<BlackjackPlayer> players, BlackjackDealer dealer) {
+        int maxHand = 0;
+        for (BlackjackPlayer player : players) {
+            for (int i = 0; i < player.getHandCount(); i++) {
+                int value = player.getHandAt(i).getTotalValue();
+                if (value > maxHand) maxHand = value;
+            }
+        }
+    }
 }
