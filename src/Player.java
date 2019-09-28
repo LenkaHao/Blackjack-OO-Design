@@ -5,23 +5,23 @@
 import java.util.*;
 
 public class Player {
-    private List<BlackjackHand> hands;
+    private List<Hand> hands;
 
     public Player() {
-        hands = new ArrayList<BlackjackHand>();
-        BlackjackHand hand = new BlackjackHand();
+        hands = new ArrayList<Hand>();
+        Hand hand = new Hand();
         hands.add(hand);
     }
 
-    public List<BlackjackHand> getHands() {
+    public List<Hand> getHands() {
         return hands;
     }
 
-    public void addHands(BlackjackHand hand) {
+    public void addHand(Hand hand) {
         hands.add(hand);
     }
 
-    public void setHands(BlackjackHand hand, int position) {
+    public void setHands(Hand hand, int position) {
         hands.get(position).setHand(hand);
     }
 }

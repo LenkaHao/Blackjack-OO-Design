@@ -20,7 +20,7 @@ public class Hand {
         return hand;
     }
 
-    public void setHand(BlackjackHand hand) {
+    public void setHand(Hand hand) {
         this.hand = new ArrayList<>();
         this.hand.add(hand.getCardAt(0));
     }
