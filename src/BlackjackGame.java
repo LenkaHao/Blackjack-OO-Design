@@ -107,7 +107,7 @@ public class BlackjackGame implements BlackjackAction{
         return actions[action_idx];
     }
 
-    private boolean playAction(BlackjackPlayer player, String action, BlackjackHand hand) {
+    private void playAction(BlackjackPlayer player, String action, BlackjackHand hand) {
         switch (action) {
             case "hit":
                 hit(deck, hand);
@@ -116,16 +116,13 @@ public class BlackjackGame implements BlackjackAction{
                 stand();
                 break;
             case "doubleUp":
-                // isEnoughBalance(player, hand.getBet())
                 doubleUp(deck, player, hand);
                 judge.isBusted(hand);
                 break;
             case "split":
-                // if (judge.isSplittable)
                 split(player, hand);
                 break;
         }
-        return true;
     }
 
     private boolean isNextRound() {
@@ -148,21 +145,25 @@ public class BlackjackGame implements BlackjackAction{
             for (BlackjackPlayer player : playerList) {
                 List<BlackjackHand> hands = player.getHands();
                 for (BlackjackHand hand : hands) {
-                    boolean isValid;
-                    String next_action;
-                    do {
-                        System.out.println(hand);
-                        next_action = getUserAction();
-                        isValid = judge.isActionValid(player, hand, next_action);
-                        if (!isValid)
-                            System.out.println("Your input action is not valid. Please try again.");
-                    } while (!isValid);
-                    if (playAction(player, next_action, hand))
-                        break;
+                    while(!judge.isBusted(hand)) {
+                        boolean isValid;
+                        String next_action;
+                        do {
+                            System.out.println(hand);
+                            next_action = getUserAction();
+                            isValid = judge.isActionValid(player, hand, next_action);
+                            if (!isValid)
+                                System.out.println("Your input action is not valid. Please try again.");
+                        } while (!isValid);
+                        playAction(player, next_action, hand);
+                        if (next_action.equals("stand") || next_action.equals("doubleUp")) {
+                            break;
+                        }
+                    }
                 }
             }
             // Dealer
-            while (!judge.canDealerHit(dealer)) {
+            while (judge.canDealerHit(dealer)) {
                 hit(deck, dealer.getHand());
             }
             isGameEnd = isNextRound();
