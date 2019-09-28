@@ -18,7 +18,7 @@ public class BlackjackJudge extends Judge{
         return cardValue1 == cardValue2;
     }
 
-    private boolean isBusted(BlackjackHand hand) {
+    public boolean isBusted(BlackjackHand hand) {
         return hand.getTotalValue() > 21;
     }
 

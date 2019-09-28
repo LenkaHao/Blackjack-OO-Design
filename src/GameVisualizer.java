@@ -32,18 +32,11 @@ public class GameVisualizer {
     }
 
     /**
-     * update and store number of round the game played
-     */
-    public void updateGameState() {
-        gameState++;
-    }
-
-    /**
      * visualize the game, print game data at the end of each round
      * @param players
      */
     public void display(List<BlackjackPlayer> players) {
-        System.out.println("Round " + gameState + " result!");
+        System.out.println("Round " + gameState++ + " result!");
 
         for (Map.Entry<Integer, Integer> entry : playerState.entrySet()) {
             System.out.println("Player " + entry.getKey() + "'s balance is " + entry.getValue());
