@@ -33,6 +33,10 @@ public class Hand {
         hand.add(card);
     }
 
+    public void removeCard(Card card) {
+        hand.remove(card);
+    }
+
     public int getCardCount() {
         return hand.size();
     }
