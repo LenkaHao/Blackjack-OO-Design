@@ -11,8 +11,18 @@ public class Hand {
         hand = new ArrayList<Card>();
     }
 
+    public Hand(Card card) {
+        hand = new ArrayList<Card>();
+        hand.add(card);
+    }
+
     public List<Card> getHand() {
         return hand;
+    }
+
+    public void setHand(BlackjackHand hand) {
+        this.hand = new ArrayList<>();
+        this.hand.add(hand.getCardAt(0));
     }
 
     public void clearHand() {

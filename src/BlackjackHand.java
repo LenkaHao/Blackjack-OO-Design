@@ -1,6 +1,16 @@
-import java.util.HashSet;
+/**
+ * Created by Jiatong Hao, Xiankang Wu and Lijun Chen on 9/27/2019.
+ */
 
 public class BlackjackHand extends Hand {
+
+    public BlackjackHand() {
+        super();
+    }
+
+    public BlackjackHand(Card card) {
+        super(card);
+    }
 
     public int getTotalValue() {
         int value = 0;
