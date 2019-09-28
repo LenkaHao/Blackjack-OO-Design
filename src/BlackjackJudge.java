@@ -1,3 +1,4 @@
+import java.util.HashMap;
 import java.util.List;
 
 public class BlackjackJudge extends Judge{
@@ -81,12 +82,20 @@ public class BlackjackJudge extends Judge{
     }
 
     public void whoWins(List<BlackjackPlayer> players, BlackjackDealer dealer) {
-        int maxHand = 0;
+
+        HashMap<Integer, Integer> map = new HashMap<>();
+        int dealerValue = dealer.getHand().getTotalValue();
+
         for (BlackjackPlayer player : players) {
             for (int i = 0; i < player.getHandCount(); i++) {
                 int value = player.getHandAt(i).getTotalValue();
-                if (value > maxHand) maxHand = value;
+                map.put(player.getId(), value);
             }
+        }
+
+        if (dealerValue > maxValue) {
+            System.out.println("Dealer wins!");
+
         }
     }
 }
