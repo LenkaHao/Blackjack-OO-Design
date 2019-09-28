@@ -163,7 +163,7 @@ public class BlackjackGame implements BlackjackAction{
                 }
             }
             // Dealer
-            while (!judge.canDealerHit(dealer)) {
+            while (judge.canDealerHit(dealer)) {
                 hit(deck, dealer.getHand());
             }
             isGameEnd = isNextRound();
