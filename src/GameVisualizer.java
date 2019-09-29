@@ -26,13 +26,13 @@ public class GameVisualizer {
     }
 
     public void printPlayerBalance(int playerId, int roundBalance, int playerBalance, int roundNum) {
-        System.out.println("Player " + playerId + " current balance is " + playerBalance);
+        System.out.println("\nPlayer " + playerId + " current balance is " + playerBalance);
         if (roundBalance > 0)
-            System.out.println("At round " + roundNum + ", Player " + playerId + " wins " + roundBalance + " !");
+            System.out.println("At round " + roundNum + ", Player " + playerId + " wins " + roundBalance + ".");
         else if (roundBalance == 0)
-            System.out.println("At round " + roundNum + ", Player " + playerId + " doesn't win.");
+            System.out.println("At round " + roundNum + ", Player " + playerId + " is tie.");
         else
-            System.out.println("At round " + roundNum + ", Player " + playerId + " loses " + -roundBalance + " !");
+            System.out.println("At round " + roundNum + ", Player " + playerId + " loses " + -roundBalance + ".");
         System.out.println("Player " + playerId + " current balance is " + playerBalance);
     }
 }
