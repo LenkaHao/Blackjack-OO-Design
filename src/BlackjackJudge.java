@@ -187,9 +187,12 @@ public class BlackjackJudge extends Judge<List<BlackjackPlayer>, BlackjackDealer
                 }
 
                 int id = player.getId();
-                if (roundBalance > 0) System.out.println("This round, Player " + id + " wins " + roundBalance + "!");
-                else if (roundBalance == 0) System.out.println("This round, Player " + id + " doesn't win.");
-                else System.out.println("This round, " + id + "loses" + roundBalance + "!");
+                if (roundBalance > 0)
+                    System.out.println("This round, Player " + id + " wins " + roundBalance + "!");
+                else if (roundBalance == 0)
+                    System.out.println("This round, Player " + id + " doesn't win.");
+                else
+                    System.out.println("This round, Player " + id + "loses " + roundBalance + "dollars!");
             }
         }
     }

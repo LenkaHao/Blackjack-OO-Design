@@ -26,6 +26,8 @@ public class BlackjackGame extends Game implements BlackjackAction {
     public void start() {
         // Players make their bets
         for (BlackjackPlayer player : playerList) {
+            if (player.getBalance() <= 0)
+                continue;
             player.makeBet();
         }
         System.out.println("\nGame starts!");
@@ -36,6 +38,8 @@ public class BlackjackGame extends Game implements BlackjackAction {
             dealCards();
 
             for (BlackjackPlayer player : playerList) {
+                if (player.getBalance() <= 0)
+                    continue;
                 List<BlackjackHand> hands = player.getHands();
                 int handIdx = 0;
                 for (BlackjackHand hand : hands) {
@@ -46,12 +50,14 @@ public class BlackjackGame extends Game implements BlackjackAction {
                         boolean isValid;
                         String next_action;
                         do {
-                            System.out.println(hand);
+                            // Print all cards in the current hand
+                            System.out.println("Your hand " + handIdx + " is:\n" + hand);
                             next_action = getUserAction();
                             isValid = judge.isActionValid(player, hand, next_action);
                             if (!isValid)
-                                System.out.println("Your input action is not valid. Please try again.");
+                                System.out.println("You cannot " + next_action + ". Please select another action.");
                         } while (!isValid);
+                        System.out.println("Your hand " + handIdx + " is:\n" + hand);
                         playAction(player, next_action, hand);
                         if (next_action.equals("stand") || next_action.equals("doubleUp")) {
                             break;
