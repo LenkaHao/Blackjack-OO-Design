@@ -8,14 +8,15 @@ public class BlackjackGame extends Game implements BlackjackAction {
     private BlackjackDeck deck;
     private BlackjackJudge judge;
     private GameVisualizer visualizer;
-    private int winVal = 21;
-    private int dealerVal = 17;
-    private int playerCount;
+    private final String[] actions = {"hit", "stand", "doubleUp", "split"};
     private final int WIN_VAL_DIFF = 4;
+    private final int MAX_WIN_VAL = 4;
     private final int MAX_PLAYER = 3;
     private final int MIN_PLAYER = 1;
     private final int BALANCE = 100;
-    private static String[] actions = {"hit", "stand", "doubleUp", "split"};
+    private int winVal = 21;
+    private int dealerVal = 17;
+    private int playerCount;
 
     // constructor
     BlackjackGame() {
@@ -26,16 +27,10 @@ public class BlackjackGame extends Game implements BlackjackAction {
 
     public void start() {
         // Players make their bets
-        for (BlackjackPlayer player : playerList) {
-            if (player.getBalance() <= 0) {
-                System.out.println("Player" + player.getId());
-                continue;
-            }
-            player.makeBet();
-        }
         System.out.println("\nGame starts!");
         boolean isGameEnd = false;
         while (!isGameEnd) {
+            playersMakeBet();
             System.out.println("\n*****************\nRound: " + getRound());
             // Players and the dealer get initial cards
             dealCards();
@@ -81,7 +76,7 @@ public class BlackjackGame extends Game implements BlackjackAction {
                     }
                 }
             }
-            System.out.println("Players' terms end!");
+            System.out.println("\nAll players' terms end!");
             // Dealer
             System.out.println("\n******\nDealer's term:");
             judge.checkDealerStatus(dealer);
@@ -89,14 +84,17 @@ public class BlackjackGame extends Game implements BlackjackAction {
                 hit(deck, dealer.getHand());
                 System.out.println("Dealer hits!");
                 judge.checkDealerStatus(dealer);
+                System.out.println("Dealer's current hand is:" + dealer.getHand());
             }
             System.out.println("Dealer's term ends!");
 
             judge.checkWinner(playerList, dealer);
-            isGameEnd = isNextRound();
-            visualizer.display(playerList);
-            nextRound();
-            clearHands();
+            visualizer.printPlayerBalance(playerList, getRound());
+            isGameEnd = startNextRound();
+            if (!isGameEnd) {
+                nextRound();
+                clearHands();
+            }
         }
     }
 
@@ -113,7 +111,8 @@ public class BlackjackGame extends Game implements BlackjackAction {
         int playerCount;
         System.out.println("\n*****************\n");
         do {
-            System.out.println("Please tell us how many players will join the game:");
+            System.out.println("Please tell us how many players will join the game.");
+            System.out.println("We do not allow players to join or quit, until he/she loses all the balance.");
             while (!sc.hasNextInt()) {
                 System.out.println("Input must be an integer larger or equal to 1!");
                 sc.next();
@@ -137,7 +136,8 @@ public class BlackjackGame extends Game implements BlackjackAction {
         sc.nextLine(); // Read the input buffer and discard it.
         choice = sc.nextLine();
         if (!choice.equals("y") && !choice.equals("Y")) {
-            System.out.println("Next step: Please enter your bet for each player individually.");
+            System.out.println("\nYou skipped the configuration.\n" +
+                    "Next step: Please enter your bet for each player individually.");
             return;
         }
 
@@ -149,7 +149,7 @@ public class BlackjackGame extends Game implements BlackjackAction {
                 sc.next();
             }
             newWinVal = sc.nextInt();
-            if (newWinVal > 30)
+            if (newWinVal > MAX_WIN_VAL)
                 System.out.println("Your input is too large!");
         } while (newWinVal < this.winVal);
         this.winVal = newWinVal;
@@ -184,11 +184,21 @@ public class BlackjackGame extends Game implements BlackjackAction {
         playerList = new ArrayList<BlackjackPlayer>(playerCount);
         for (int id = 0; id < playerCount; id++)
             playerList.add(new BlackjackPlayer(id, BALANCE)); // balance can be specified by the input later
-        visualizer = new GameVisualizer(playerList);
+        visualizer = new GameVisualizer();
+    }
+
+    private void playersMakeBet() {
+        for (BlackjackPlayer player : playerList) {
+            if (player.getBalance() <= 0) {
+                System.out.println("Player" + player.getId());
+                continue;
+            }
+            player.makeBet();
+        }
     }
 
     /**
-     * Deals initial two cards to both players and delaers in alternating sequence
+     * Initialize two cards to both players and dealers in alternating sequence.
      */
     private void dealCards() {
         for (int idx = 0; idx < 2; idx++) {
@@ -207,10 +217,10 @@ public class BlackjackGame extends Game implements BlackjackAction {
         int action_idx;
         int idx = 1;
         do {
+            System.out.println("\nPlease select your next action with its corresponding number (e.g., 0 to hit):");
             for (String action : actions) {
                 System.out.print(action + ": " + idx++ + "\t");
             }
-            System.out.println("\nPlease select your next action with its corresponding number (e.g., 0 to hit):");
             while (!sc.hasNextInt()) {
                 System.out.println("Invalid input. Please enter an integer between 1 to 4.\n");
                 sc.next();
@@ -222,6 +232,7 @@ public class BlackjackGame extends Game implements BlackjackAction {
             } else
                 break;
         } while (true);
+
         System.out.println("Your action: " + actions[action_idx - 1]);
         return actions[action_idx - 1];
     }
@@ -248,7 +259,7 @@ public class BlackjackGame extends Game implements BlackjackAction {
         }
     }
 
-    private boolean isNextRound() {
+    private boolean startNextRound() {
         System.out.println("Do you wish to start a new round? \nInput y or Y to continue, otherwise exit.");
         Scanner sc = new Scanner(System.in);
         String choice;
