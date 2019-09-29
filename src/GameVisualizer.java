@@ -2,8 +2,6 @@
  * Created by Jiatong Hao, Xiankang Wu and Lijun Chen on 9/27/2019.
  */
 
-import java.util.List;
-
 public class GameVisualizer {
 
     public void msg(String str) {
@@ -27,19 +25,14 @@ public class GameVisualizer {
         System.out.println("Your hand " + handIdx + " is:\n" + hand);
     }
 
-    public void printPlayerWinningState() {
-
-    }
-
-    /**
-     * visualize the game, print game data at the end of each round
-     * @param players
-     */
-    public void printPlayerBalance(List<BlackjackPlayer> players, int roundNum) {
-        System.out.println("\nRound " + roundNum + " result:");
-
-        for (BlackjackPlayer player : players) {
-            System.out.println("Player " + player.getId() + " current balance is " + player.getBalance());
-        }
+    public void printPlayerBalance(int playerId, int roundBalance, int playerBalance, int roundNum) {
+        System.out.println("Player " + playerId + " current balance is " + playerBalance);
+        if (roundBalance > 0)
+            System.out.println("At round " + roundNum + ", Player " + playerId + " wins " + roundBalance + " !");
+        else if (roundBalance == 0)
+            System.out.println("At round " + roundNum + ", Player " + playerId + " doesn't win.");
+        else
+            System.out.println("At round " + roundNum + ", Player " + playerId + " loses " + -roundBalance + " !");
+        System.out.println("Player " + playerId + " current balance is " + playerBalance);
     }
 }
