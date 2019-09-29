@@ -1,6 +1,6 @@
 import java.util.List;
 
-public class BlackjackJudge extends Judge<List<BlackjackPlayer>, BlackjackDealer>{
+public class BlackjackJudge extends Judge<List<BlackjackPlayer>, BlackjackDealer> {
 
     private int dealerValue;
 
@@ -33,17 +33,47 @@ public class BlackjackJudge extends Judge<List<BlackjackPlayer>, BlackjackDealer
 
     // judge methods
 
+    public void checkDealerStatus(BlackjackDealer dealer) {
+        BlackjackHand dealerHand = dealer.getHand();
+        int dealerHandVal = dealer.getHand().getTotalValue();
+        if (isNaturalBlackjack(dealerHand)) {
+            System.out.println("Dealer has a natural BlackJack!");
+        } else if (isBlackjack(dealerHand)) {
+            System.out.println("Dealer has a BlackJack!");
+        } else {
+            System.out.println("Dealer has a total card value = " + dealerHandVal);
+            if (dealerHandVal >= this.dealerValue) {
+                if (isBust(dealerHand)) {
+                    System.out.println("Dealer Busted!");
+                }
+                System.out.println("Dealer's term ends!");
+            }
+        }
+    }
+
     public boolean isActionValid(BlackjackPlayer player, BlackjackHand hand, String action) {
 
         switch (action) {
             case "hit":
-                return !isBusted(hand);
+                return !isBust(hand);
             case "split":
                 return isSplittable(player, hand);
             case "doubleUp":
                 return isEnoughBalance(player, hand.getBet());
         }
         return true;
+    }
+
+    private boolean isEnoughBalance(BlackjackPlayer player, int bet) {
+        return player.getBalance() - bet >= 0;
+    }
+
+    public boolean isBust(BlackjackHand hand) {
+        if (hand.getTotalValue() > this.winValue) {
+            System.out.println("Current hand value is : " + hand.getTotalValue() + "\nBusted!");
+            return true;
+        }
+        return false;
     }
 
     private boolean isSplittable(BlackjackPlayer player, BlackjackHand hand) {
@@ -55,33 +85,28 @@ public class BlackjackJudge extends Judge<List<BlackjackPlayer>, BlackjackDealer
         return cardValue1 == cardValue2;
     }
 
-    private boolean isEnoughBalance(BlackjackPlayer player, int bet) {
-        return player.getBalance() - bet >= 0;
-    }
-
-    public boolean isBusted(BlackjackHand hand) {
-        if (hand.getTotalValue() > 21) {
-            System.out.println("Your current hand value is : " + hand.getTotalValue() + "\nYour hand is busted!");
-            return true;
-        }
-        return false;
-    }
-
     public boolean canDealerHit(BlackjackDealer dealer) {
         return dealer.getHand().getTotalValue() < dealerValue;
     }
 
-    public boolean isBlackjack(BlackjackHand hand) {
-        return hand.getTotalValue() == 21;
+    /**
+     * In default a Blackjack has a total value of 21 (default winValue).
+     * We allow our user to change the winValue.
+     *
+     * @param hand
+     * @return if the current hand is Blackjack.
+     */
+    private boolean isBlackjack(BlackjackHand hand) {
+        return hand.getTotalValue() == this.winValue;
     }
 
     private boolean isNaturalBlackjack(BlackjackHand hand) {
-        if (!isBlackjack(hand)) {
+        if (hand.getCardCount() != 2) {
             return false;
         }
         boolean hasAce = false;
         boolean hasFaceCard = false;
-        for (int i = 0; i < hand.getCardCount(); i++) {
+        for (int i = 0; i < 2; i++) {
             Card card = hand.getCardAt(i);
             if (card.getValue() > 10) {
                 hasFaceCard = true;
@@ -93,13 +118,13 @@ public class BlackjackJudge extends Judge<List<BlackjackPlayer>, BlackjackDealer
         return hasAce && hasFaceCard;
     }
 
-    public void whoWins(List<BlackjackPlayer> players, BlackjackDealer dealer) {
+    public void checkWinner(List<BlackjackPlayer> players, BlackjackDealer dealer) {
 
         BlackjackHand dealerHand = dealer.getHand();
         int dealerValue = dealerHand.getTotalValue();
 
-        if (isBusted(dealerHand)) {
-            // if dealer bust
+        if (isBust(dealerHand)) {
+            // if dealer is bust
             for (BlackjackPlayer player : players) {
                 int roundBalance = 0;
                 for (int i = 0; i < player.getHandCount(); i++) {
@@ -107,20 +132,21 @@ public class BlackjackJudge extends Judge<List<BlackjackPlayer>, BlackjackDealer
                     int balance = player.getBalance();
                     int bet = playerHand.getBet();
 
-                    if (!isBusted(playerHand)) {
+                    if (!isBust(playerHand)) {
                         // if not bust, player hand wins
                         player.setBalance(balance + bet * 2);
                         roundBalance += playerHand.getBet();
-                    }  else {
+                    } else {
                         // if this player hand bust, both player and dealer lose, tie
                         player.setBalance(balance + bet);
                     }
                 }
-                if (roundBalance > 0) System.out.println("This round, Player " + player.getId() + " wins " + roundBalance + "!");
+                if (roundBalance > 0)
+                    System.out.println("This round, Player " + player.getId() + " wins " + roundBalance + "!");
                 else System.out.println("This round, Player " + player.getId() + " doesn't win.");
             }
         } else {
-            // if dealer not bust
+            // if dealer does not bust
             for (BlackjackPlayer player : players) {
                 int roundBalance = 0;
                 for (int i = 0; i < player.getHandCount(); i++) {
@@ -129,7 +155,7 @@ public class BlackjackJudge extends Judge<List<BlackjackPlayer>, BlackjackDealer
                     int balance = player.getBalance();
                     int bet = playerHand.getBet();
 
-                    if (isBusted(playerHand)) {
+                    if (isBust(playerHand)) {
                         // if player hand bust, player hand loses
                         roundBalance -= bet;
                     } else {
