@@ -11,7 +11,7 @@ public class Player<E extends Hand> {
 
     private List<E> hands;
 
-    public Player(){
+    public Player() {
         hands = new ArrayList<E>();
     }
 
@@ -26,6 +26,12 @@ public class Player<E extends Hand> {
 
     public List<E> getHands() {
         return hands;
+    }
+
+    public void clearHands() {
+        for (int idx = 0; idx < hands.size(); idx++) {
+            hands.get(idx).clearHand();
+        }
     }
 
     public void addHand(E hand) {
