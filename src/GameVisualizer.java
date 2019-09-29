@@ -19,6 +19,10 @@ public class GameVisualizer {
         System.out.println("You cannot " + action + ". Please select another action.");
     }
 
+    public void displayInfo(int playerId, int playerBalance, int handIdx) {
+        System.out.println("Player: " + playerId + ", Balance = " + playerBalance + ", Hand: " + handIdx);
+    }
+
     public void displayPlayerHand(int handIdx, BlackjackHand hand) {
         System.out.println("Your hand " + handIdx + " is:\n" + hand);
     }
@@ -32,7 +36,7 @@ public class GameVisualizer {
      * @param players
      */
     public void printPlayerBalance(List<BlackjackPlayer> players, int roundNum) {
-        System.out.println("Round " + roundNum + " result!");
+        System.out.println("\nRound " + roundNum + " result:");
 
         for (BlackjackPlayer player : players) {
             System.out.println("Player " + player.getId() + " current balance is " + player.getBalance());
