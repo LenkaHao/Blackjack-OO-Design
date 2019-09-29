@@ -1,7 +1,6 @@
-import java.util.HashMap;
 import java.util.List;
 
-public class BlackjackJudge extends Judge{
+public class BlackjackJudge extends Judge<List<BlackjackPlayer>, BlackjackDealer>{
 
     private int dealerValue;
 
@@ -99,45 +98,72 @@ public class BlackjackJudge extends Judge{
         BlackjackHand dealerHand = dealer.getHand();
         int dealerValue = dealerHand.getTotalValue();
 
-        if (isBusted(dealerHand)) {  // if dealer bust
+        if (isBusted(dealerHand)) {
+            // if dealer bust
             for (BlackjackPlayer player : players) {
+                int roundBalance = 0;
                 for (int i = 0; i < player.getHandCount(); i++) {
                     BlackjackHand playerHand = player.getHandAt(i);
-                    if (!isBusted(playerHand)) {  // if this player hand not bust, this hand wins
-                        System.out.println("Player " + player.getId() + " wins " + player.getBalance() + "!");
-                        player.setBalance(player.getBalance() + playerHand.getBet() * 2);
-                    }  else {  // if this player hand bust, both player and dealer lose, balance remains the same
-                        System.out.println("Both player's and dealer's hands are busted, nobody wins!");
-                        player.setBalance(player.getBalance() + playerHand.getBet());
+                    int balance = player.getBalance();
+                    int bet = playerHand.getBet();
+
+                    if (!isBusted(playerHand)) {
+                        // if not bust, player hand wins
+                        player.setBalance(balance + bet * 2);
+                        roundBalance += playerHand.getBet();
+                    }  else {
+                        // if this player hand bust, both player and dealer lose, tie
+                        player.setBalance(balance + bet);
                     }
                 }
+                if (roundBalance > 0) System.out.println("This round, Player " + player.getId() + " wins " + roundBalance + "!");
+                else System.out.println("This round, Player " + player.getId() + " doesn't win.");
             }
-        } else {  // if dealer not bust
+        } else {
+            // if dealer not bust
             for (BlackjackPlayer player : players) {
+                int roundBalance = 0;
                 for (int i = 0; i < player.getHandCount(); i++) {
                     BlackjackHand playerHand = player.getHandAt(i);
                     int value = playerHand.getTotalValue();
-                    if (isBusted(playerHand)) {  // if this player hand bust, this hand loses
+                    int balance = player.getBalance();
+                    int bet = playerHand.getBet();
 
-                    } else {  // if player hand not bust
-                        if (value < dealerValue) {  // if player hand value < dealer hand value, dealer hand wins
-
-                        } else if (value == dealerValue) {  // if they are the same value
-                            if (value < winValue) {  // if neigher blackjack, nor natural blackjack, tie
-
-                            } else if (isNaturalBlackjack(dealerHand) && isNaturalBlackjack(playerHand))
-                        } else {  // if player hand value > dealer hand value, player hand wins
-
-                        }
-
-                    }
-                        if (value > dealerValue) {
-                            System.out.println("Player " + player.getId() + " wins!");
-                            player.setBalance(player.getBalance() + playerHand.getBet());
+                    if (isBusted(playerHand)) {
+                        // if player hand bust, player hand loses
+                        roundBalance -= bet;
+                    } else {
+                        // if player hand not bust
+                        if (value < dealerValue) {
+                            // if player hand value < dealer hand value, player hand loses
+                            roundBalance -= bet;
                         } else if (value == dealerValue) {
-                            if ()
+                            if (isNaturalBlackjack(dealerHand) && isNaturalBlackjack(playerHand)) {
+                                // both dealer hand & player hand is natural blackjack, tie
+                                player.setBalance(balance + bet);
+                            } else if (isNaturalBlackjack(dealerHand) && !isBlackjack(playerHand)) {
+                                // dealer hand == natural blackjack && player hand == blackjack, player hand loses
+                                roundBalance -= bet;
+                            } else if (isBlackjack(dealerHand) && isNaturalBlackjack(playerHand)) {
+                                // dealer hand == blackjack && player hand == natural blackjack, player hand wins
+                                player.setBalance(balance + bet * 2);
+                                roundBalance += bet;
+                            } else {
+                                // both blackjack or neither blackjack, nor natural blackjack, tie
+                                player.setBalance(balance + bet);
+                            }
+                        } else {
+                            // if player hand value > dealer hand value, player hand wins
+                            player.setBalance(balance + bet * 2);
+                            roundBalance += bet;
                         }
+                    }
                 }
+
+                int id = player.getId();
+                if (roundBalance > 0) System.out.println("This round, Player " + id + " wins " + roundBalance + "!");
+                else if (roundBalance == 0) System.out.println("This round, Player " + id + " doesn't win.");
+                else System.out.println("This round, " + id + "loses" + roundBalance + "!");
             }
         }
     }
