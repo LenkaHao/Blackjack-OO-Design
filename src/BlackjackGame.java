@@ -18,7 +18,7 @@ public class BlackjackGame extends Game implements BlackjackAction {
 
     // constructor
     BlackjackGame() {
-        super(0);
+        super(0); // starts
         setGameParams();
         initGame();
     }
@@ -42,7 +42,7 @@ public class BlackjackGame extends Game implements BlackjackAction {
                     System.out.println("Player: " + player.getId() + ", Hand: " + handIdx++);
                     System.out.println("Dealer face-up card: " + dealer.getVisibleCard());
 
-                    while (!judge.isBusted(hand)) {
+                    while (!judge.isBust(hand)) {
                         boolean isValid;
                         String next_action;
                         do {
@@ -60,12 +60,20 @@ public class BlackjackGame extends Game implements BlackjackAction {
                 }
             }
             // Dealer
+            System.out.println("Player's term ends!");
+            System.out.println("\n******\nDealer's term:");
+            judge.checkDealerStatus(dealer);
             while (judge.canDealerHit(dealer)) {
                 hit(deck, dealer.getHand());
+                System.out.println("Dealer hits!");
+                judge.checkDealerStatus(dealer);
             }
+            judge.checkWinner(playerList, dealer);
             isGameEnd = isNextRound();
-            nextRound();
+
             visualizer.display(playerList);
+            nextRound();
+            clearHands();
         }
         // Display statistics for all players.
     }
@@ -178,12 +186,13 @@ public class BlackjackGame extends Game implements BlackjackAction {
             }
             System.out.println("\nPlease select your next action with its corresponding number (e.g., 0 to hit):");
             while (!sc.hasNextInt()) {
-                System.out.println("Invalid input. Please enter an integer!");
+                System.out.println("Invalid input. Please enter an integer between 0 to 3:");
                 sc.next();
             }
             action_idx = sc.nextInt();
             if (action_idx < 0 || action_idx >= actions.length) {
-                System.out.println("Invalid action number! Please enter an integer between 0 and 3!");
+                System.out.println("Invalid action number! Please enter an integer between 0 to 3:");
+                idx = 0;
             } else
                 break;
         } while (true);
@@ -201,7 +210,7 @@ public class BlackjackGame extends Game implements BlackjackAction {
                 break;
             case "doubleUp":
                 doubleUp(deck, player, hand);
-                judge.isBusted(hand);
+                judge.isBust(hand);
                 break;
             case "split":
                 split(player, hand);
@@ -215,6 +224,13 @@ public class BlackjackGame extends Game implements BlackjackAction {
         String choice;
         choice = sc.nextLine();
         return !choice.equals("y") && !choice.equals("Y");
+    }
+
+    private void clearHands() {
+        dealer.clearHands();
+        for (BlackjackPlayer player : playerList) {
+            player.clearHands();
+        }
     }
 
     /**
@@ -260,10 +276,5 @@ public class BlackjackGame extends Game implements BlackjackAction {
     @Override
     public void stand() {
         return;
-    }
-
-    public static void main(String args[]) {
-        BlackjackGame game = new BlackjackGame();
-        game.start();
     }
 }
