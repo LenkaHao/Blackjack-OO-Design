@@ -30,34 +30,37 @@ public class BlackjackGame extends Game implements BlackjackAction {
         System.out.println("\nGame starts!");
         boolean isGameEnd = false;
         while (!isGameEnd) {
-            playersMakeBet();
+
             System.out.println("\n*****************\nRound: " + getRound());
             // Players and the dealer get initial cards
             dealCards();
 
             for (BlackjackPlayer player : playerList) {
-                if (player.getBalance() <= 0) {
+                System.out.println("\n################4\nPlayer " + player.getId());
+                if (player.getBalance() == 0) {
                     continue;
                 }
+                player.makeBet();
                 List<BlackjackHand> hands = player.getHands();
                 int handIdx = 0;
                 for (BlackjackHand hand : hands) {
-                    System.out.println("Player: " + player.getId() +
-                            " Balance = " + player.getBalance() +
-                            ", Hand: " + handIdx++);
-                    System.out.println("Dealer face-up card: " + dealer.getVisibleCard());
+                    System.out.println("Player: " + player.getId() + " Hand: " + handIdx +
+                            " Balance: " + player.getBalance() + " Bet: " + hand.getBet());
+                    System.out.println("Dealer face-up card:\n" + dealer.getVisibleCard());
                     if (judge.isNaturalBlackjack(hand)) {
-                        System.out.println("Your current hand is a Natural Blackjack!");
+                        System.out.println("Your cards are:\n" + hand);
+                        System.out.println("Your current hand is a Natural Blackjack! Gorgeous!!!");
                         continue;
                     }
                     while (!judge.isBust(hand)) {
                         boolean isValid;
                         String next_action;
-                        System.out.println("Your hand " + handIdx + " is:\n" + hand);
+                        System.out.println("Your cards are:\n" + hand);
                         if (judge.isBlackjack(hand)) {
                             System.out.println("Your current hand is a Blackjack!");
                             break;
                         }
+                        System.out.println("Current hand value is : " + hand.getTotalValue());
                         do {
                             // Print all cards in the current hand
                             next_action = getUserAction();
@@ -70,7 +73,7 @@ public class BlackjackGame extends Game implements BlackjackAction {
                             break;
                         }
                     }
-                    System.out.println("Your hand " + handIdx + " is:\n" + hand);
+                    System.out.println("Your hand " + handIdx++ + " is:\n" + hand);
                     if (judge.isBust(hand)) {
                         System.out.println("Player " + player.getId() + " Busted!");
                     }
@@ -88,8 +91,10 @@ public class BlackjackGame extends Game implements BlackjackAction {
             }
             System.out.println("Dealer's term ends!");
 
-            judge.checkWinner(playerList, dealer);
-            visualizer.printPlayerBalance(playerList, getRound());
+            for (BlackjackPlayer player : playerList) {
+                int roundBalance = judge.checkWinner(player, dealer);
+                visualizer.printPlayerBalance(player.getId(), roundBalance, player.getBalance(), getRound());
+            }
             isGameEnd = startNextRound();
             if (!isGameEnd) {
                 nextRound();
@@ -187,16 +192,6 @@ public class BlackjackGame extends Game implements BlackjackAction {
         visualizer = new GameVisualizer();
     }
 
-    private void playersMakeBet() {
-        for (BlackjackPlayer player : playerList) {
-            if (player.getBalance() <= 0) {
-                System.out.println("Player" + player.getId());
-                continue;
-            }
-            player.makeBet();
-        }
-    }
-
     /**
      * Initialize two cards to both players and dealers in alternating sequence.
      */
@@ -221,6 +216,7 @@ public class BlackjackGame extends Game implements BlackjackAction {
             for (String action : actions) {
                 System.out.print(action + ": " + idx++ + "\t");
             }
+            System.out.println();
             while (!sc.hasNextInt()) {
                 System.out.println("Invalid input. Please enter an integer between 1 to 4.\n");
                 sc.next();
@@ -253,14 +249,14 @@ public class BlackjackGame extends Game implements BlackjackAction {
                 split(player, hand);
                 break;
         }
-        System.out.println("Current hand value is : " + hand.getTotalValue());
+//        System.out.println("Current hand value is : " + hand.getTotalValue());
         if (judge.isBlackjack(hand)) {
             System.out.println("Your current hand is a Blackjack!");
         }
     }
 
     private boolean startNextRound() {
-        System.out.println("Do you wish to start a new round? \nInput y or Y to continue, otherwise exit.");
+        System.out.println("\nDo you wish to start a new round? \nInput y or Y to continue, otherwise exit.");
         Scanner sc = new Scanner(System.in);
         String choice;
         choice = sc.nextLine();
