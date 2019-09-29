@@ -2,108 +2,192 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class BlackjackGame implements BlackjackAction{
+public class BlackjackGame extends Game implements BlackjackAction {
     private List<BlackjackPlayer> playerList;
     private BlackjackDealer dealer;
     private BlackjackDeck deck;
     private BlackjackJudge judge;
     private GameVisualizer visualizer;
-    private int round;
     private int winVal = 21;
     private int dealerVal = 17;
+    private int playerCount;
+    private final int WIN_VAL_DIFF = 4;
+    private final int MAX_PLAYER = 3;
+    private final int BALANCE = 100;
     private static String[] actions = {"hit", "stand", "doubleUp", "split"};
 
     // constructor
     BlackjackGame() {
+        super(0);
         setGameParams();
         initGame();
     }
 
-    private void setGameParams() {
-        /**
-         * Initialize black
-         */
-        System.out.println("Welcome to our game!");
-        System.out.println("Created by Jiatong Hao, Xiankang Wu and Lijun Chen on 9/23/2019.");
-        System.out.println("Do you want to change default values? \n e.g. 21 is the default blackjack target value, " +
-                "you can change it to an integer between 22 to 30");
-        Scanner sc = new Scanner(System.in);
+    public void start() {
+        // Players make their bets
+        for (BlackjackPlayer player : playerList) {
+            player.makeBet();
+        }
+        System.out.println("\nGame starts!");
+        boolean isGameEnd = false;
+        while (!isGameEnd) {
+            System.out.println("\n*****************\nRound: " + getRound());
+            // Players and the dealer get initial cards
+            dealCards();
 
-        String choice;
-        choice = sc.nextLine();
-        if (!choice.equals("y") && !choice.equals("Y"))
-            return;
+            for (BlackjackPlayer player : playerList) {
+                List<BlackjackHand> hands = player.getHands();
+                int handIdx = 0;
+                for (BlackjackHand hand : hands) {
+                    System.out.println("Player: " + player.getId() + ", Hand: " + handIdx++);
+                    System.out.println("Dealer face-up card: " + dealer.getVisibleCard());
 
-        System.out.println("Please input the new blackjack win value. Otherwise it is 21 in default");
-        int winVal;
-        do {
-            while (!sc.hasNextInt()) {
-                System.out.println("Your input must be an integer between 22 to 30!");
-                sc.next();
+                    while (!judge.isBusted(hand)) {
+                        boolean isValid;
+                        String next_action;
+                        do {
+                            System.out.println(hand);
+                            next_action = getUserAction();
+                            isValid = judge.isActionValid(player, hand, next_action);
+                            if (!isValid)
+                                System.out.println("Your input action is not valid. Please try again.");
+                        } while (!isValid);
+                        playAction(player, next_action, hand);
+                        if (next_action.equals("stand") || next_action.equals("doubleUp")) {
+                            break;
+                        }
+                    }
+                }
             }
-            winVal = sc.nextInt();
-            if (winVal > 30)
-                System.out.println("Your input is too large!");
-        } while (winVal < 21);
-        this.winVal = winVal;
-
-
-        System.out.println("Please input the new dealer value. Otherwise it is 17 in default");
-        int dealerVal;
-        do {
-            while (!sc.hasNextInt()) {
-                System.out.println("Your input must be an integer between 22 to 30!");
-                sc.next();
+            // Dealer
+            while (judge.canDealerHit(dealer)) {
+                hit(deck, dealer.getHand());
             }
-            dealerVal = sc.nextInt();
-            if (dealerVal > winVal - 4)
-                System.out.println("Your input is too large!");
-        } while (dealerVal < 21);
-        this.dealerVal = dealerVal;
-
+            isGameEnd = isNextRound();
+            nextRound();
+            visualizer.display(playerList);
+        }
+        // Display statistics for all players.
     }
 
-    private void initGame() {
-        // Read User input
+    /**
+     * Initialize game params of BlackJack Game.
+     */
+    private void setGameParams() {
+
+        System.out.println("Welcome to our game!");
+        System.out.println("Created by Jiatong Hao, Xiankang Wu and Lijun Chen on 9/23/2019.\n");
         Scanner sc = new Scanner(System.in);
-        int playerCount;
+
+        // Specify number of players
+        int playerCount = 0;
+        System.out.println("\n*****************\n");
         do {
-            System.out.println("\n*****************\n");
-            System.out.println("Please tell us how many Player will join the game.");
+            System.out.println("Please tell us how many players will join the game:");
             while (!sc.hasNextInt()) {
                 System.out.println("Input must be an integer larger or equal to 1!");
                 sc.next();
             }
             playerCount = sc.nextInt();
-        } while (playerCount == 0);
+            if (playerCount > MAX_PLAYER) {
+                System.out.println("Maximum number of players: " + MAX_PLAYER + ". Your input is too large.");
+            } else {
+                this.playerCount = playerCount;
+            }
+        } while (this.playerCount == 0);
 
-        dealer = new BlackjackDealer();
-        judge = new BlackjackJudge(dealerVal, winVal);
+        System.out.println("Before we start, do you want to change default values?\ne.g. 21 is the default blackjack " +
+                "target value, you can change it to an integer.");
+        System.out.println("Enter y or Y to change, otherwise to skip.");
+
+        String choice;
+        sc.nextLine(); // Read the input buffer and discard it.
+        choice = sc.nextLine();
+        if (!choice.equals("y") && !choice.equals("Y")) {
+            System.out.println("Next step: Please enter your bet for each player individually.");
+            return;
+        }
+
+        System.out.println("Please enter the new blackjack win value. Otherwise it is 21 in default");
+        int newWinVal;
+        do {
+            while (!sc.hasNextInt()) {
+                System.out.println("Invalid input. You must enter an integer!");
+                sc.next();
+            }
+            newWinVal = sc.nextInt();
+            if (newWinVal > 30)
+                System.out.println("Your input is too large!");
+        } while (newWinVal < this.winVal);
+        this.winVal = newWinVal;
+
+
+        System.out.println("Please enter the new dealer value. Otherwise it is 17 in default");
+        int newDealerVal;
+        do {
+            while (!sc.hasNextInt()) {
+                System.out.println("Please enter the new dealer value in Integer:");
+                sc.next();
+            }
+            newDealerVal = sc.nextInt();
+            if (newDealerVal > this.winVal - this.WIN_VAL_DIFF)
+                System.out.println("Your input is too large! It cannot exceed " + this.winVal + " - " + WIN_VAL_DIFF +
+                        " = " + (this.winVal - WIN_VAL_DIFF));
+            else if (newDealerVal < this.dealerVal - this.WIN_VAL_DIFF) {
+                System.out.println("Your input is too small! It should be at least " + this.dealerVal + " - " + WIN_VAL_DIFF +
+                        " = " + (this.dealerVal - WIN_VAL_DIFF));
+            } else
+                break;
+        } while (true);
+        this.dealerVal = newDealerVal;
+        System.out.println("\nNext step: Please enter your bet for each player individually.");
+    }
+
+    private void initGame() {
         deck = new BlackjackDeck();
-        visualizer = new GameVisualizer(playerList);
-        deck.shuffle();
-        round = 1;
+        judge = new BlackjackJudge(dealerVal, winVal);
+        dealer = new BlackjackDealer(deck);
         playerList = new ArrayList<BlackjackPlayer>(playerCount);
         for (int id = 0; id < playerCount; id++)
-            playerList.add(new BlackjackPlayer(id, 100)); // balance can be specified by the input later
+            playerList.add(new BlackjackPlayer(id, BALANCE)); // balance can be specified by the input later
+        visualizer = new GameVisualizer(playerList);
+    }
+
+    /**
+     * Deals initial two cards to both players and delaers in alternating sequence
+     */
+    private void dealCards() {
+        for (int idx = 0; idx < 2; idx++) {
+            for (BlackjackPlayer player : playerList) {
+                BlackjackCard newCard = (BlackjackCard) deck.dealCard();
+                ((BlackjackHand) player.getHands().get(0)).addCard(newCard);
+            }
+            BlackjackCard newCard = (BlackjackCard) deck.dealCard();
+            ((BlackjackHand) dealer.getHands().get(0)).addCard(newCard);
+        }
     }
 
     private String getUserAction() {
         // Read User input
         Scanner sc = new Scanner(System.in);
         int action_idx;
+        int idx = 0;
         do {
-            System.out.println("Please select your next action with its corresponding number (e.g., 0):");
-            int idx = 0;
             for (String action : actions) {
-                System.out.println(action + ": " + idx++ + "\n");
+                System.out.print(action + ": " + idx++ + "\t");
+            }
+            System.out.println("\nPlease select your next action with its corresponding number (e.g., 0 to hit):");
+            while (!sc.hasNextInt()) {
+                System.out.println("Invalid input. Please enter an integer!");
+                sc.next();
             }
             action_idx = sc.nextInt();
             if (action_idx < 0 || action_idx >= actions.length) {
-                System.out.println("Invalid input!");
+                System.out.println("Invalid action number! Please enter an integer between 0 and 3!");
             } else
                 break;
         } while (true);
+        System.out.println("Your action: " + actions[action_idx]);
         return actions[action_idx];
     }
 
@@ -133,48 +217,9 @@ public class BlackjackGame implements BlackjackAction{
         return !choice.equals("y") && !choice.equals("Y");
     }
 
-    public void start() {
-        // Players make their bets
-        for (BlackjackPlayer player : playerList) {
-            player.makeBet();
-        }
-        boolean isGameEnd = false;
-        while (!isGameEnd) {
-            System.out.println("Current Round: " + round);
-            // Player
-            for (BlackjackPlayer player : playerList) {
-                List<BlackjackHand> hands = player.getHands();
-                for (BlackjackHand hand : hands) {
-                    while(!judge.isBusted(hand)) {
-                        boolean isValid;
-                        String next_action;
-                        do {
-                            System.out.println(hand);
-                            next_action = getUserAction();
-                            isValid = judge.isActionValid(player, hand, next_action);
-                            if (!isValid)
-                                System.out.println("Your input action is not valid. Please try again.");
-                        } while (!isValid);
-                        playAction(player, next_action, hand);
-                        if (next_action.equals("stand") || next_action.equals("doubleUp")) {
-                            break;
-                        }
-                    }
-                }
-            }
-            // Dealer
-            while (judge.canDealerHit(dealer)) {
-                hit(deck, dealer.getHand());
-            }
-            isGameEnd = isNextRound();
-            round++;
-            visualizer.display(playerList);
-        }
-        // Display statistics for all players.
-    }
-
     /**
      * The player takes one additional card
+     *
      * @param deck - deck
      * @param hand - what we have right now
      */
@@ -186,6 +231,7 @@ public class BlackjackGame implements BlackjackAction{
 
     /**
      * The player could split into two hands, if the initial two cards are the same rank
+     *
      * @param hand - the hand that wants to split
      * @return true if successfully split hands, false otherwise
      */
@@ -200,6 +246,7 @@ public class BlackjackGame implements BlackjackAction{
 
     /**
      * The player double up their bets and immediately followed by a hit and stand
+     *
      * @param deck
      * @param hand
      */
