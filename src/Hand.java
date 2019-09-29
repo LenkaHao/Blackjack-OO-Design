@@ -48,9 +48,13 @@ public class Hand<T extends Card> {
     @Override
     public String toString() {
         String result = "";
-        for (T card : cards) {
-            result = result + card + "\n";
+        for (int i = 0; i < cards.size(); i++) {
+            result = result + cards.get(i);
+            if (i != cards.size() - 1) {
+                result = result + ", ";
+            }
         }
         return result;
+
     }
 }
