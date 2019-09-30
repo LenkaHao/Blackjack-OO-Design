@@ -36,17 +36,16 @@ public class BlackjackJudge extends Judge<BlackjackPlayer, BlackjackDealer> {
 
     public void checkDealerStatus(BlackjackDealer dealer) {
         BlackjackHand dealerHand = dealer.getHand();
-        int dealerHandVal = dealer.getHand().getTotalValue();
+        int dealerHandVal = dealerHand.getTotalValue();
+
         if (isNaturalBlackjack(dealerHand)) {
             System.out.println("Dealer has a natural BlackJack!");
         } else if (isBlackjack(dealerHand)) {
             System.out.println("Dealer has a BlackJack!");
         } else {
             System.out.println("Dealer has a total card value = " + dealerHandVal);
-            if (dealerHandVal >= this.dealerValue) {
-                if (!isBust(dealerHand)) {
-                    System.out.println("Dealer hand has value larger than " + this.dealerValue);
-                }
+            if (!isBust(dealerHand)) {
+                System.out.println("Dealer hand has value larger than " + this.dealerValue);
             }
         }
     }
@@ -69,10 +68,7 @@ public class BlackjackJudge extends Judge<BlackjackPlayer, BlackjackDealer> {
     }
 
     public boolean isBust(BlackjackHand hand) {
-        if (hand.getTotalValue() > this.winValue) {
-            return true;
-        }
-        return false;
+        return hand.getTotalValue() > this.winValue;
     }
 
     private boolean isSplittable(BlackjackPlayer player, BlackjackHand hand) {
@@ -100,21 +96,7 @@ public class BlackjackJudge extends Judge<BlackjackPlayer, BlackjackDealer> {
     }
 
     public boolean isNaturalBlackjack(BlackjackHand hand) {
-        if (hand.getCardCount() != 2) {
-            return false;
-        }
-        boolean hasAce = false;
-        boolean hasFaceCard = false;
-        for (int i = 0; i < 2; i++) {
-            Card card = hand.getCardAt(i);
-            if (card.getValue() > 10) {
-                hasFaceCard = true;
-            }
-            if (card.getValue() == 1) {
-                hasAce = true;
-            }
-        }
-        return hasAce && hasFaceCard;
+        return isBlackjack(hand) && hand.getCardCount() == 2;
     }
 
     public int checkWinner(BlackjackPlayer player, BlackjackDealer dealer) {
