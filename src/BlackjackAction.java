@@ -5,7 +5,7 @@
 public interface BlackjackAction {
 
     /**
-     * the player takes one additional card
+     *  Deals one card
      */
     void hit(BlackjackDeck deck, BlackjackHand hand);
 
@@ -18,8 +18,8 @@ public interface BlackjackAction {
 
     /**
      * The player double up their bets and immediately followed by a hit and stand
-     * @param deck
-     * @param hand
+     * @param deck instance of deck
+     * @param hand instance of hand
      */
     public void doubleUp(BlackjackDeck deck, BlackjackPlayer player, BlackjackHand hand);
 

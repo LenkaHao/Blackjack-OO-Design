@@ -7,14 +7,15 @@ public class BlackjackJudge extends Judge<BlackjackPlayer, BlackjackDealer> {
 
     private int winValue;
 
-    // constructor
-
+    /**
+     * Constructor.
+     * @param dealerValue value that the dealer will stop hitting when his/her hand reaches. In default it is 17.
+     * @param winValue value that the Blackjack refers to. In default it is 21.
+     */
     public BlackjackJudge(int dealerValue, int winValue) {
         this.dealerValue = dealerValue;
         this.winValue = winValue;
     }
-
-    // getter & setter
 
     public int getDealerValue() {
         return dealerValue;
@@ -32,10 +33,14 @@ public class BlackjackJudge extends Judge<BlackjackPlayer, BlackjackDealer> {
         this.winValue = winValue;
     }
 
-    // judge methods
-
+    /**
+     * Tells if the action for a specific hand of a player is valid.
+     * @param player current player.
+     * @param hand hand that the current player is holding.
+     * @param action string represents the player action.
+     * @return boolean. Returns true if the action is valid, false otherwise.
+     */
     public boolean isActionValid(BlackjackPlayer player, BlackjackHand hand, String action) {
-
         switch (action) {
             case "hit":
                 return !isBust(hand);
@@ -47,12 +52,17 @@ public class BlackjackJudge extends Judge<BlackjackPlayer, BlackjackDealer> {
         return true;
     }
 
-    private boolean isEnoughBalance(BlackjackPlayer player, int bet) {
-        return player.getBalance() - bet >= 0;
-    }
-
+    /**
+     * Tells if the current hand is bust.
+     * @param hand the hand instance.
+     * @return True if bust, false otherwise.
+     */
     public boolean isBust(BlackjackHand hand) {
         return hand.getTotalValue() > this.winValue;
+    }
+
+    private boolean isEnoughBalance(BlackjackPlayer player, int bet) {
+        return player.getBalance() - bet >= 0;
     }
 
     private boolean isSplittable(BlackjackPlayer player, BlackjackHand hand) {
@@ -64,25 +74,39 @@ public class BlackjackJudge extends Judge<BlackjackPlayer, BlackjackDealer> {
         return cardValue1 == cardValue2;
     }
 
+    /**
+     * Tells if the dealer can still hit.
+     * @param dealer dealer instance.
+     * @return True if the dealer can hit, false otherwise.
+     */
     public boolean canDealerHit(BlackjackDealer dealer) {
         return dealer.getHand().getTotalValue() < dealerValue;
     }
 
     /**
-     * In default a Blackjack has a total value of 21 (default winValue).
-     * We allow our user to change the winValue.
-     *
-     * @param hand
+     * Tells if the hand is a Blackjack. A Blackjack means that the total value of the hand cards is 21.
+     * @param hand hand instance.
      * @return if the current hand is Blackjack.
      */
     public boolean isBlackjack(BlackjackHand hand) {
         return hand.getTotalValue() == this.winValue;
     }
 
+    /**
+     * Tells if the hand is a natural Blackjack. A natural Blackjack is a BlackJack with one Ace and one Face Card.
+     * @param hand hand instance.
+     * @return if the current hand is natural Blackjack.
+     */
     public boolean isNaturalBlackjack(BlackjackHand hand) {
         return isBlackjack(hand) && hand.getCardCount() == 2;
     }
 
+    /**
+     * Compaer each hand of the player and the one of the dealer.
+     * @param player instance of player.
+     * @param dealer instance of dealer.
+     * @return Balance that the current player wins or loses. If wins or tie, it is positive, otherwise it is negative.
+     */
     public int checkWinner(BlackjackPlayer player, BlackjackDealer dealer) {
         BlackjackHand dealerHand = dealer.getHand();
         int dealerValue = dealerHand.getTotalValue();

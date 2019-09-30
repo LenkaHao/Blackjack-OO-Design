@@ -8,7 +8,11 @@ public class BlackjackPlayer extends Player {
 
     private int balance;
 
-    // Constructor
+    /**
+     * Constructor.
+     * @param id player id.
+     * @param balance Initial balance for the player.
+     */
     public BlackjackPlayer(int id, int balance) {
         super(id);
         this.balance = balance;
@@ -45,7 +49,13 @@ public class BlackjackPlayer extends Player {
         }
     }
 
+    /**
+     * Ask the player if he/she would like to cash out.
+     *
+     * @return True if cash out, false otherwise
+     */
     public boolean cashOut() {
+
         Scanner scanner = new Scanner(System.in);
         boolean isCashOut = false;
         System.out.println("Player " + getId() + ", do you want to cash out? Please enter Y/y for yes. All other input means no.");
@@ -56,10 +66,21 @@ public class BlackjackPlayer extends Player {
         return isCashOut;
     }
 
+    /**
+     * Getter for hands.
+     *
+     * @return the number of hands.
+     */
     public int getHandCount() {
         return getHands().size();
     }
 
+    /**
+     * Get the hand.
+     *
+     * @param idx index of the hand.
+     * @return an instance of BlackjackHand.
+     */
     public BlackjackHand getHandAt(int idx) {
         return (BlackjackHand) getHands().get(idx);
     }

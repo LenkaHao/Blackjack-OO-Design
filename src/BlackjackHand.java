@@ -22,6 +22,10 @@ public class BlackjackHand extends Hand<BlackjackCard> {
         bet = newBet;
     }
 
+    /**
+     * Compute the total value of cards within the current hand.
+     * @return total value of cards within the current hand.
+     */
     public int getTotalValue() {
         int value = 0;
         int aceCount = 0;

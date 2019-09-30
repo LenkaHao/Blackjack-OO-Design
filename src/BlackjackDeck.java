@@ -2,6 +2,9 @@ import java.util.*;
 
 public class BlackjackDeck extends Deck {
 
+    /**
+     * Initialize the deck with cards.
+     */
     public void createDeck() {
         List<BlackjackCard> cards = new ArrayList<BlackjackCard>();
         String[] suits = new String[]{"Spade", "Heart", "Club", "Diamond"};
