@@ -29,9 +29,7 @@ public class Player<E extends Hand> {
     }
 
     public void clearHands() {
-        for (int idx = 0; idx < hands.size(); idx++) {
-            hands.get(idx).clearHand();
-        }
+        hands = new ArrayList<E>();
     }
 
     public void addHand(E hand) {
