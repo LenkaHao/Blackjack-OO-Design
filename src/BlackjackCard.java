@@ -3,12 +3,18 @@ public class BlackjackCard extends Card {
         super(suit, value);
     }
 
-    // returns the soft value: 10 for face card, 1 for Ace
+    /**
+     *  Get the soft value: 10 for face card, 1 for Ace
+     * @return value in int.
+     */
     public int getSoftValue() {
         return getValue();
     }
 
-    // returns the hard value: 10 for face card, 11 for Ace
+    /**
+     *  Get the hard value: 10 for face card, 11 for Ace
+     * @return value in int.
+     */
     public int getHardValue() {
         return getValue();
     }
