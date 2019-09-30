@@ -55,4 +55,8 @@ public class GameVisualizer {
             System.out.println("At round " + roundNum + ", Player " + playerId + " loses " + -roundBalance + ".");
         System.out.println("Player " + playerId + " current balance is " + playerBalance);
     }
+
+    public void playerLeaves(BlackjackPlayer player) {
+        System.out.println("Player " + player.getId() + "leaves the game with $" + player.getBalance());
+    }
 }
