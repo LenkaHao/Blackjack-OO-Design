@@ -7,9 +7,7 @@ public class BlackjackGame extends Game implements BlackjackAction {
     private final int DEALER_VAL = 17;
     private final int MIN_DEALER_VAL = 16;
     private final int MAX_DEALER_VAL = 18;
-    private final int WIN_VAL_DIFF = 4;
     private final int MAX_PLAYER = 4;
-    private final int MIN_PLAYER = 1;
     private final int BALANCE = 100;
     private final int INITIAL_CARD_NUM = 2;
 
@@ -155,7 +153,6 @@ public class BlackjackGame extends Game implements BlackjackAction {
     private void playersPlay() {
         for (BlackjackPlayer player : playerList) {
             System.out.println("\n#################\nPlayer " + player.getId() + " starts!");
-            // for (BlackjackHand hand : hands) {
             for (int i = 0; i < player.getHandCount(); i++) {
                 BlackjackHand hand = player.getHandAt(i);
                 visualizer.playHandInfo(player.getId(), player.getBalance(), i, hand.getBet());
