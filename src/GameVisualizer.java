@@ -47,8 +47,8 @@ public class GameVisualizer {
 
     public void playHandInfo(int playerId, int playerBalance, int handIdx, int bet) {
         int displayedHandIdx = handIdx + 1;
-        System.out.println("Player " + playerId + ", Hand no. " + displayedHandIdx + ", Bet for this hand =" +
-                " "+ bet + ", Balance = " + playerBalance );
+        System.out.println("Player " + playerId + ", Hand no." + displayedHandIdx + ", Bet for this hand = $" +
+                bet + ", Balance = $" + playerBalance );
     }
 
     public void displayDealerCard(BlackjackCard card) {
@@ -61,7 +61,7 @@ public class GameVisualizer {
     }
 
     public void displayPlayerHand(BlackjackHand hand) {
-        System.out.println("Your current hand is:\n" + hand);
+        System.out.println("Your current hand is: " + hand);
         System.out.println("Your current hand has value: " + hand.getTotalValue() + "\n");
     }
 
@@ -78,12 +78,12 @@ public class GameVisualizer {
     public void printPlayerBalance(int playerId, int roundBalance, int playerBalance, int roundNum) {
         // System.out.println("\nPlayer " + playerId + " current balance is " + playerBalance);
         if (roundBalance > 0)
-            System.out.println("At round " + roundNum + ", Player " + playerId + " wins " + roundBalance + ".");
+            System.out.println("At round " + roundNum + ", Player " + playerId + " wins $" + roundBalance + ".");
         else if (roundBalance == 0)
             System.out.println("At round " + roundNum + ", Player " + playerId + " is tie.");
         else
-            System.out.println("At round " + roundNum + ", Player " + playerId + " loses " + -roundBalance + ".");
-        System.out.println("Player " + playerId + " current balance is " + playerBalance);
+            System.out.println("At round " + roundNum + ", Player " + playerId + " loses $" + -roundBalance + ".");
+        System.out.println("Player " + playerId + " current balance is $" + playerBalance);
     }
 
     public void playerLeaves(BlackjackPlayer player) {

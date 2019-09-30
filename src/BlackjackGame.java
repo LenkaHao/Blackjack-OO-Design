@@ -2,6 +2,9 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Class encapsulates a Blackjack card game.
+ */
 public class BlackjackGame extends Game implements BlackjackAction {
     private final int WIN_VAL = 21;
     private final int DEALER_VAL = 17;
@@ -23,7 +26,7 @@ public class BlackjackGame extends Game implements BlackjackAction {
     private int balance = BALANCE;
     private int playerCount;
 
-    // constructor
+
     BlackjackGame() {
         super(0);
         visualizer = new GameVisualizer();
@@ -33,6 +36,9 @@ public class BlackjackGame extends Game implements BlackjackAction {
         initGame();
     }
 
+    /**
+     * Entry method of the BlackjackGame.
+     */
     public void start() {
         System.out.println("\nGame starts!");
         while (!playerList.isEmpty()) {
@@ -42,6 +48,10 @@ public class BlackjackGame extends Game implements BlackjackAction {
         System.out.println("\nGame ends.");
     }
 
+    /**
+     * The main workflow of players in a single round. First, each player makes their bets, and then cards are dealt,
+     * each player makes their move, dealer plays, and the round is wrapped up.
+     */
     public void playARound() {
         System.out.println("\n*****************\nRound: " + getRound());
 
@@ -60,8 +70,6 @@ public class BlackjackGame extends Game implements BlackjackAction {
      */
     private void setGameParams() {
         Scanner sc = new Scanner(System.in);
-
-        // check if user want to overwrite default game parameters
         visualizer.displaySetDefaultParams();
         String choice = sc.nextLine();
         if (!choice.equals("y") && !choice.equals("Y")) {
@@ -72,19 +80,6 @@ public class BlackjackGame extends Game implements BlackjackAction {
         setDealerParam();
         setPlayerBalance();
         System.out.println("The game will use " + dealerVal + " as dealer stopping value and " + balance + " as balance.\n");
-
-//        System.out.println("Please enter the new blackjack win value. Otherwise it is 21 in default");
-//        int newWinVal;
-//        do {
-//            while (!sc.hasNextInt()) {
-//                System.out.println("Invalid input. You must enter an integer!");
-//                sc.next();
-//            }
-//            newWinVal = sc.nextInt();
-//            if (newWinVal > MAX_WIN_VAL)
-//                System.out.println("Your input is too large!");
-//        } while (newWinVal < this.winVal);
-//        this.winVal = newWinVal;
     }
 
     private void setDealerParam() {
@@ -127,7 +122,7 @@ public class BlackjackGame extends Game implements BlackjackAction {
     private void initGame() {
         deck = new BlackjackDeck();
         judge = new BlackjackJudge(dealerVal, winVal);
-        dealer = new BlackjackDealer(deck);
+        dealer = new BlackjackDealer();
         playerList = new ArrayList<>(playerCount);
         for (int i = 0; i < playerCount; i++)
             playerList.add(new BlackjackPlayer(i+1, balance));
@@ -148,7 +143,7 @@ public class BlackjackGame extends Game implements BlackjackAction {
     }
 
     /**
-     * Players make move
+     * The workflow of all players selecting their actions in a single round.
      */
     private void playersPlay() {
         for (BlackjackPlayer player : playerList) {
@@ -197,14 +192,19 @@ public class BlackjackGame extends Game implements BlackjackAction {
         }
     }
 
+    /**
+     * Ask the player to select the next action, and decide if it is valid.
+     * @param player current player.
+     * @param hand current hand the player is dealing with.
+     * @return string of the action.
+     */
     private String getUserAction(BlackjackPlayer player, BlackjackHand hand) {
         Scanner sc = new Scanner(System.in);
         boolean isValid = false;
         int input = -1;
         while (!isValid) {
             visualizer.displayActionChoices(actions);
-
-            // if input is 1, 2, 3, 4 and action is valid, change isValid = true
+            // if input is valid, change isValid = true
             input = getInteger(sc.nextLine());
             if (1 <= input && input <= actions.length && judge.isActionValid(player, hand, actions[input-1])) {
                 System.out.println("Your action: " + actions[input - 1]);
@@ -216,6 +216,12 @@ public class BlackjackGame extends Game implements BlackjackAction {
         return actions[input - 1];
     }
 
+    /**
+     * Execute the action selected by a single player with factory design pattern.
+     * @param player current player.
+     * @param action current action selected by the player.
+     * @param hand current hand the player is dealing with.
+     */
     private void playAction(BlackjackPlayer player, String action, BlackjackHand hand) {
         switch (action) {
             case "hit":
@@ -233,6 +239,9 @@ public class BlackjackGame extends Game implements BlackjackAction {
         }
     }
 
+    /**
+     * logic of dealer. Our dealer will keep on hitting until his/her cards reaches the dealerVal, or bust.
+     */
     private void dealerPlay() {
         System.out.println("\n#################\nDealer starts!");
 
@@ -262,6 +271,9 @@ public class BlackjackGame extends Game implements BlackjackAction {
         System.out.println("#################\n");
     }
 
+    /**
+     * Remove players with $0 balance, and ask other players if they would like to cash out or join the next round.
+     */
     private void calcRoundResult() {
         List<BlackjackPlayer> toRemove = new ArrayList<>();
         for (BlackjackPlayer player : playerList) {
@@ -271,7 +283,7 @@ public class BlackjackGame extends Game implements BlackjackAction {
                 visualizer.playerLeaves(player);
                 toRemove.add(player);
             }
-            if (player.cashOut()) {
+            else if (player.cashOut()) {
                 visualizer.playerLeaves(player);
                 toRemove.add(player);
             }
@@ -281,6 +293,9 @@ public class BlackjackGame extends Game implements BlackjackAction {
         }
     }
 
+    /**
+     * Reset hands of players and dealer.
+     */
     private void resetHands() {
         dealer.clearHands();
         dealer.addHand(new BlackjackHand());
@@ -291,10 +306,10 @@ public class BlackjackGame extends Game implements BlackjackAction {
     }
 
     /**
-     * The player takes one additional card
+     * Deals on card.
      *
-     * @param deck - deck
-     * @param hand - what we have right now
+     * @param deck - a deck instance
+     * @param hand - a hand instance
      */
     @Override
     public void hit(BlackjackDeck deck, BlackjackHand hand) {
@@ -303,25 +318,30 @@ public class BlackjackGame extends Game implements BlackjackAction {
     }
 
     /**
-     * The player could split into two hands, if the initial two cards are the same rank
+     * The player could split into two hands, if the two cards in the current hand are of the same rank （10）
+     * Cards must be same value - In most casinos, Tens, Jacks, Queens and Kings all count as ten
+     * and can be considered the same for splitting rules.
      *
-     * @param hand - the hand that wants to split
+     * @param hand - a hand instance
      * @return true if successfully split hands, false otherwise
      */
     @Override
     public void split(BlackjackPlayer player, BlackjackHand hand) {
         BlackjackCard card = hand.getCardAt(0);
         BlackjackHand newHand = new BlackjackHand(card);
+        int handBet = hand.getBet();
         hand.removeCard(card);
         player.addHand(newHand);
-        player.setBalance(-hand.getBet());
+        int handCount = player.getHandCount();
+        player.getHandAt(handCount - 1).setBet(handBet);
+        player.setBalance(-handBet);
     }
 
     /**
-     * The player double up their bets and immediately followed by a hit and stand
+     * The player double up their bets and immediately followed by a hit and stand.
      *
-     * @param deck
-     * @param hand
+     * @param deck a deack instance.
+     * @param hand a hand instance.
      */
     @Override
     public void doubleUp(BlackjackDeck deck, BlackjackPlayer player, BlackjackHand hand) {
@@ -330,6 +350,9 @@ public class BlackjackGame extends Game implements BlackjackAction {
         hit(deck, hand);
     }
 
+    /**
+     * Player stands means that he/she finish the action of the current hand.
+     */
     @Override
     public void stand() {
         return;
