@@ -13,20 +13,36 @@ public class GameVisualizer {
         System.out.println("Created by Jiatong Hao, Xiankang Wu and Lijun Chen on 9/23/2019.\n");
     }
 
-    public void displayInfo(int playerId, int playerBalance, int handIdx) {
-        System.out.println("Player: " + playerId + ", Balance = " + playerBalance + ", Hand: " + handIdx);
+    public void invalidAction(String action) {
+        System.out.println("You cannot " + action + ". Please select another action.");
     }
 
-    public void displayPlayerHand(int handIdx, BlackjackHand hand) {
-        System.out.println("Your current hand " + handIdx + " is:\n" + hand);
+    public void playHandInfo(int playerId, int playerBalance, int handIdx, int bet) {
+        System.out.println("Player: " + playerId + ", Hand: " + handIdx + "Bet for this hand: "+ bet + ", Balance = " + playerBalance );
+    }
+
+    public void displayDealerCard(BlackjackCard card) {
+        System.out.println("Dealer's face-up card: " + card);
     }
 
     public void displayDealerHand(BlackjackHand hand) {
-        System.out.println("Dealer's current hand is:\n" + hand);
+        System.out.println("Dealer's current hand is: \n" + hand);
+        System.out.println("Dealer's current hand has value: " + hand.getTotalValue());
     }
 
-    public void invalidAction(String action) {
-        System.out.println("You cannot " + action + ". Please select another action.");
+    public void displayPlayerHand(BlackjackHand hand) {
+        System.out.println("Your current hand is:\n" + hand);
+        System.out.println("Your current hand has value: " + hand.getTotalValue());
+    }
+
+
+    public void displayActionChoices(String[] actions) {
+        System.out.println("\nPlease select your next action with its corresponding number (e.g., 0 to hit):");
+        int idx = 1;
+        for (String action : actions) {
+            System.out.print(action + ": " + idx++ + "\t");
+        }
+        System.out.println();
     }
 
     public void printPlayerBalance(int playerId, int roundBalance, int playerBalance, int roundNum) {
