@@ -34,22 +34,6 @@ public class BlackjackJudge extends Judge<BlackjackPlayer, BlackjackDealer> {
 
     // judge methods
 
-    public void checkDealerStatus(BlackjackDealer dealer) {
-        BlackjackHand dealerHand = dealer.getHand();
-        int dealerHandVal = dealerHand.getTotalValue();
-
-        if (isNaturalBlackjack(dealerHand)) {
-            System.out.println("Dealer has a natural BlackJack!");
-        } else if (isBlackjack(dealerHand)) {
-            System.out.println("Dealer has a BlackJack!");
-        } else {
-            System.out.println("Dealer has a total card value = " + dealerHandVal);
-            if (!isBust(dealerHand)) {
-                System.out.println("Dealer hand has value larger than " + this.dealerValue);
-            }
-        }
-    }
-
     public boolean isActionValid(BlackjackPlayer player, BlackjackHand hand, String action) {
 
         switch (action) {
@@ -160,78 +144,4 @@ public class BlackjackJudge extends Judge<BlackjackPlayer, BlackjackDealer> {
         }
         return roundBalance;
     }
-
-//    public void checkWinner(List<BlackjackPlayer> players, BlackjackDealer dealer) {
-//
-//        List<Integer> res = new ArrayList<>();
-//        int[] ans = new int[players.size()];
-//
-//        BlackjackHand dealerHand = dealer.getHand();
-//        int dealerValue = dealerHand.getTotalValue();
-//
-//        if (isBust(dealerHand)) {
-//            // if dealer is bust
-//            for (BlackjackPlayer player : players) {
-//                int roundBalance = 0;
-//                for (int i = 0; i < player.getHandCount(); i++) {
-//                    BlackjackHand playerHand = player.getHandAt(i);
-//                    int bet = playerHand.getBet();
-//
-//                    if (!isBust(playerHand)) {
-//                        // if not bust, player hand wins
-//                        player.setBalance(bet * 2);
-//                        roundBalance += playerHand.getBet();
-//                    } else {
-//                        // if this player hand bust, both player and dealer lose, tie
-//                        player.setBalance(bet);
-//                    }
-//                }
-//                res.add(roundBalance);
-//                ans[player.getId()] = roundBalance;
-//            }
-//        } else {
-//            // if dealer does not bust
-//            for (BlackjackPlayer player : players) {
-//                int roundBalance = 0;
-//                for (int i = 0; i < player.getHandCount(); i++) {
-//                    BlackjackHand playerHand = player.getHandAt(i);
-//                    int value = playerHand.getTotalValue();
-//                    int bet = playerHand.getBet();
-//
-//                    if (isBust(playerHand)) {
-//                        // if player hand bust, player hand loses
-//                        roundBalance -= bet;
-//                    } else {
-//                        // if player hand not bust
-//                        if (value < dealerValue) {
-//                            // if player hand value < dealer hand value, player hand loses
-//                            roundBalance -= bet;
-//                        } else if (value == dealerValue) {
-//                            if (isNaturalBlackjack(dealerHand) && isNaturalBlackjack(playerHand)) {
-//                                // both dealer hand & player hand is natural blackjack, tie
-//                                player.setBalance(bet);
-//                            } else if (isNaturalBlackjack(dealerHand) && !isBlackjack(playerHand)) {
-//                                // dealer hand == natural blackjack && player hand == blackjack, player hand loses
-//                                roundBalance -= bet;
-//                            } else if (isBlackjack(dealerHand) && isNaturalBlackjack(playerHand)) {
-//                                // dealer hand == blackjack && player hand == natural blackjack, player hand wins
-//                                player.setBalance(bet * 2);
-//                                roundBalance += bet;
-//                            } else {
-//                                // both blackjack or neither blackjack, nor natural blackjack, tie
-//                                player.setBalance(bet);
-//                            }
-//                        } else {
-//                            // if player hand value > dealer hand value, player hand wins
-//                            player.setBalance(bet * 2);
-//                            roundBalance += bet;
-//                        }
-//                    }
-//                }
-//                res.add(roundBalance);
-//                ans[player.getId()] = roundBalance;
-//            }
-//        }
-//        return res;
-//    }
 }
