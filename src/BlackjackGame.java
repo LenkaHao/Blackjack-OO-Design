@@ -42,9 +42,6 @@ public class BlackjackGame extends Game implements BlackjackAction {
             // For each player
             for (BlackjackPlayer player : playerList) {
                 System.out.println("\n################4\nPlayer " + player.getId());
-//                if (player.getBalance() == 0) {
-//                    continue;
-//                }
                 List<BlackjackHand> hands = player.getHands();
                 int handIdx = 0;
                 for (BlackjackHand hand : hands) {
@@ -97,7 +94,10 @@ public class BlackjackGame extends Game implements BlackjackAction {
             for (BlackjackPlayer player : playerList) {
                 int roundBalance = judge.checkWinner(player, dealer);
                 visualizer.printPlayerBalance(player.getId(), roundBalance, player.getBalance(), getRound());
-                if (roundBalance == 0 || player.cashOut()) {
+                if (roundBalance == 0) {
+                    playerList.remove(player);
+                }
+                if (player.cashOut()) {
                     playerList.remove(player);
                 }
             }
