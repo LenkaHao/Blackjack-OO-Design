@@ -1,5 +1,7 @@
 /**
  * Created by Jiatong Hao, Xiankang Wu and Lijun Chen on 9/23/2019.
+ *
+ * A class to represent a face card in a Blackjack game.
  */
 
 public class BlackjackFaceCard extends BlackjackCard {

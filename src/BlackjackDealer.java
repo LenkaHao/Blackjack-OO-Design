@@ -1,5 +1,7 @@
 /**
  * Created by Jiatong Hao, Xiankang Wu and Lijun Chen on 9/23/2019.
+ *
+ * A class that represents a dealer in a Blackjack game
  */
 
 public class BlackjackDealer extends Player {

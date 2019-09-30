@@ -1,5 +1,7 @@
 /**
  * Created by Jiatong Hao, Xiankang Wu and Lijun Chen on 9/23/2019.
+ *
+ * A class that represents a  player in a Blackjack game
  */
 
 public class BlackjackPlayer extends Player {
@@ -17,32 +19,20 @@ public class BlackjackPlayer extends Player {
         addHand(new BlackjackHand());
     }
 
-    /**
-     * Getter for player's balance
-     * @return player balance
-     */
     public int getBalance() {
         return balance;
     }
 
-    /**
-     * Setter for player's balance
-     * @param currency player balance
-     */
     public void setBalance(int currency) {
         balance += currency;
     }
 
-    /**
-     * Getter for hands.
-     * @return the number of hands.
-     */
     public int getHandCount() {
         return getHands().size();
     }
 
     /**
-     * Get the hand.
+     * Get a hand using its index from players' all hands.
      * @param idx index of the hand.
      * @return an instance of BlackjackHand.
      */

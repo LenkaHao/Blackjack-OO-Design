@@ -1,5 +1,7 @@
 /**
  * Created by Jiatong Hao, Xiankang Wu and Lijun Chen on 9/27/2019.
+ *
+ * A class to represent a deck of Blackjack cards
  */
 
 import java.util.*;
@@ -7,7 +9,7 @@ import java.util.*;
 public class BlackjackDeck extends Deck {
 
     /**
-     * Initialize the deck with cards.
+     * Initialize the deck with Blackjack cards
      */
     public void createDeck() {
         List<BlackjackCard> cards = new ArrayList<BlackjackCard>();

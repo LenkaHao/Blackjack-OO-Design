@@ -1,18 +1,14 @@
 /**
  * Created by Jiatong Hao, Xiankang Wu and Lijun Chen on 9/27/2019.
+ *
+ * A class that checks winning hand and reset players’ balance in a Blackjack game
  */
 
 public class BlackjackJudge extends Judge<BlackjackPlayer, BlackjackDealer> {
 
     private int dealerValue;
-
     private int winValue;
 
-    /**
-     * Constructor.
-     * @param dealerValue value that the dealer will stop hitting when his/her hand reaches. In default it is 17.
-     * @param winValue value that the Blackjack refers to. In default it is 21.
-     */
     public BlackjackJudge(int dealerValue, int winValue) {
         this.dealerValue = dealerValue;
         this.winValue = winValue;
@@ -53,13 +49,16 @@ public class BlackjackJudge extends Judge<BlackjackPlayer, BlackjackDealer> {
         return true;
     }
 
-    /**
-     * Tells if the current hand is bust.
-     * @param hand the hand instance.
-     * @return True if bust, false otherwise.
-     */
     public boolean isBust(BlackjackHand hand) {
         return hand.getTotalValue() > this.winValue;
+    }
+
+    public boolean isBlackjack(BlackjackHand hand) {
+        return hand.getTotalValue() == this.winValue;
+    }
+
+    public boolean isNaturalBlackjack(BlackjackHand hand) {
+        return isBlackjack(hand) && hand.getCardCount() == 2;
     }
 
     private boolean isEnoughBalance(BlackjackPlayer player, int bet) {
@@ -85,25 +84,7 @@ public class BlackjackJudge extends Judge<BlackjackPlayer, BlackjackDealer> {
     }
 
     /**
-     * Tells if the hand is a Blackjack. A Blackjack means that the total value of the hand cards is 21.
-     * @param hand hand instance.
-     * @return if the current hand is Blackjack.
-     */
-    public boolean isBlackjack(BlackjackHand hand) {
-        return hand.getTotalValue() == this.winValue;
-    }
-
-    /**
-     * Tells if the hand is a natural Blackjack. A natural Blackjack is a BlackJack with one Ace and one Face Card.
-     * @param hand hand instance.
-     * @return if the current hand is natural Blackjack.
-     */
-    public boolean isNaturalBlackjack(BlackjackHand hand) {
-        return isBlackjack(hand) && hand.getCardCount() == 2;
-    }
-
-    /**
-     * Compaer each hand of the player and the one of the dealer.
+     * Compare each hand of the player and the one of the dealer.
      * @param player instance of player.
      * @param dealer instance of dealer.
      * @return Balance that the current player wins or loses. If wins or tie, it is positive, otherwise it is negative.

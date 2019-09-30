@@ -1,5 +1,7 @@
 /**
  * Created by Jiatong Hao, Xiankang Wu and Lijun Chen on 9/27/2019.
+ *
+ * A class to represent a hand of Blackjack cards in a Blackjack game
  */
 
 public class BlackjackHand extends Hand<BlackjackCard> {
@@ -23,7 +25,7 @@ public class BlackjackHand extends Hand<BlackjackCard> {
     }
 
     /**
-     * Compute the total value of cards within the current hand.
+     * Compute the total value of cards in a Blackjack game.
      * @return total value of cards within the current hand.
      */
     public int getTotalValue() {

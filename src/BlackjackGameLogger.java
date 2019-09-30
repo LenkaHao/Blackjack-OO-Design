@@ -1,5 +1,7 @@
 /**
  * Created by Jiatong Hao, Xiankang Wu and Lijun Chen on 9/27/2019.
+ *
+ * A class to log information that displays a Blackjack game situation and asks for user input
  */
 
 public class BlackjackGameLogger extends GameLogger {

@@ -1,5 +1,7 @@
 /**
  * Created by Jiatong Hao, Xiankang Wu and Lijun Chen on 9/23/2019.
+ *
+ * A generic class to represent a hand of poker cards in all card games
  */
 
 import java.util.*;
@@ -41,6 +43,11 @@ public class Hand<T extends Card> {
         return cards.size();
     }
 
+    /**
+     * Get a card using its index in the hand.
+     * @param idx index of the card.
+     * @return an instance of BlackjackCard.
+     */
     public T getCardAt(int idx) {
         return cards.get(idx);
     }

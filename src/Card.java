@@ -1,5 +1,7 @@
 /**
  * Created by Jiatong Hao, Xiankang Wu and Lijun Chen on 9/23/2019.
+ *
+ * A generic class to represent a poker card in any card game.
  */
 
 public class Card {

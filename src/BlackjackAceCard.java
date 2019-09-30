@@ -1,5 +1,7 @@
 /**
  * Created by Jiatong Hao, Xiankang Wu and Lijun Chen on 9/23/2019.
+ *
+ * A class to represent an Ace card in a Blackjack game.
  */
 
 public class BlackjackAceCard extends BlackjackCard {

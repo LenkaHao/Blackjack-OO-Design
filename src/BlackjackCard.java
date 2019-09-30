@@ -1,5 +1,7 @@
 /**
  * Created by Jiatong Hao, Xiankang Wu and Lijun Chen on 9/27/2019.
+ *
+ * A class to represent a poker card in a Blackjack game.
  */
 
 public class BlackjackCard extends Card {

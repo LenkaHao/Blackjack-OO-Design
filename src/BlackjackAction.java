@@ -1,5 +1,7 @@
 /**
  * Created by Jiatong Hao, Xiankang Wu and Lijun Chen on 9/27/2019.
+ *
+ * An interface that defines behaviors of Blackjack game participants (dealer and player)
  */
 
 public interface BlackjackAction {
