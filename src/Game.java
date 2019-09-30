@@ -14,7 +14,5 @@ public abstract class Game {
         this.round = round;
     }
 
-    void nextRound() {
-        round++;
-    }
+    abstract void playARound();
 }
